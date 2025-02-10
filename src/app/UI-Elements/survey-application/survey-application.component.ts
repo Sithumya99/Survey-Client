@@ -5,6 +5,7 @@ import { NavBarComponent } from "../nav-bar/nav-bar.component";
 import { HomePageComponent } from "../home-page/home-page.component";
 import { LoginPageComponent } from "../login-page/login-page.component";
 import { UserProfileFacade } from "../../Facades/UserProfile/UserProfileFacade.facade";
+import { AddFlowComponent } from "../add-flow/add-flow.component";
 
 @Component({
     selector: 'app-survey-application',
@@ -12,7 +13,8 @@ import { UserProfileFacade } from "../../Facades/UserProfile/UserProfileFacade.f
         CommonModule,
         NavBarComponent,
         HomePageComponent,
-        LoginPageComponent
+        LoginPageComponent,
+        AddFlowComponent
     ],
     templateUrl: './survey-application.component.html',
     standalone: true

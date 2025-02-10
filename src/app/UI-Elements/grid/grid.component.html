@@ -1,0 +1,11 @@
+<div class="container">
+    <div class="row">
+        <div *ngFor="let column of columns" class="column">
+            <div class="cell">{{ column.id }}</div>
+            <div *ngIf="column.children.length > 0">
+                <app-grid [columns]="column.children"></app-grid>
+            </div>
+        </div>
+    </div>
+</div>
+  
