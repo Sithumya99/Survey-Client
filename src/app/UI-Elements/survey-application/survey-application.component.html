@@ -1,13 +1,14 @@
 <div class="container">
-    <!-- <app-login-page *ngIf="currentPage == pageEnum.loginPage"></app-login-page>
+    <app-home-page *ngIf="currentPage == pageEnum.homePage"></app-home-page>
+    <app-login-page *ngIf="currentPage == pageEnum.loginPage"></app-login-page>
 
     <div class="application" *ngIf="currentPage !== pageEnum.loginPage">
         <div class="nav">
-            <app-nav-bar *ngIf="isLoggedIn"></app-nav-bar>
+            <app-nav-bar *ngIf="isLoggedIn" (logOut)="logOut()"></app-nav-bar>
         </div>
         <div class="pages">
-            <app-home-page *ngIf="currentPage == pageEnum.homePage"></app-home-page>
+            <app-profile-page *ngIf="currentPage == pageEnum.profilePage"></app-profile-page>
+            <app-new-survey *ngIf="currentPage == pageEnum.newSurveyPage"></app-new-survey>
         </div>
-    </div> -->
-    <app-add-flow></app-add-flow>
+    </div>
 </div>

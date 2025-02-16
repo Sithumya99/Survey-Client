@@ -15,4 +15,8 @@ import { CommonModule } from "@angular/common";
 export class GridComponent {
     @Input()
     columns: Column[] = [];
+
+    onSectionClicked(column: Column) {
+        column.children.push({ id: 1, section: column.section, children: []});
+    }
 }

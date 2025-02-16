@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="title">
+        <h1>{{survey!.surveyTitle}}</h1>
+        <p>{{survey!.surveyDescription}}</p>
+    </div>
+
+    <div class="requires-login">
+        <p>Login Required to Respond to Survey:</p>
+        <input type="checkbox" name="isLoginRequired" id="1" (change)="setLoginRequired($event)">
+    </div>
+
+    <div class="sections">
+        <div *ngFor="let section of survey!.sections">
+            <h3>{{section.sectionId + '. ' + section.sectionTitle}}</h3> <br/>
+            <p>{{section.sectionDescription}}</p>
+        </div>
+        <div class="add-section-cmd">
+            <button (click)="addSection()">Add Section</button>
+        </div>
+    </div>
+
+    <div class="flows">
+        <div class="add-flows-cmd">
+            <button (click)="addFlows()">Define Flows</button>
+        </div>
+    </div>
+</div>

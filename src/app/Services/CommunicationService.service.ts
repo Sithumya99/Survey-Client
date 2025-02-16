@@ -1,8 +1,9 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, Injector } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { environment } from "../../environments/environment";
 import { UserProfileFacade } from "../Facades/UserProfile/UserProfileFacade.facade";
+import { DialogFacade } from "../Facades/Dialog/DialogFacade.facade";
 
 
 @Injectable({
@@ -19,9 +20,11 @@ export class CommunicationService {
         }),
     };
 
-    constructor(httpClient: HttpClient) {
+    constructor(httpClient: HttpClient, injector: Injector) {
         CommunicationService.http = this;
         this.httpClient = httpClient;
+
+        DialogFacade.setInjector(injector);
     }
 
     private extractData(res: HttpResponse<any>) {

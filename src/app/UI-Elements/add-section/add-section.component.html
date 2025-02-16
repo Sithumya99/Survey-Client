@@ -1,0 +1,37 @@
+<div class="container" *ngIf="section">
+    <div class="title">
+        <input type="text" name="title" id="title" (input)="saveChanges($event, 'title')" placeholder="Add Section Title..."/>
+        <input type="text" name="description" id="description" (input)="saveChanges($event, 'description')" placeholder="Add Section description..."/>
+    </div>
+
+    <div class="questions" *ngFor="let question of section!.questions; let i = index">
+        <input type="text" (input)="saveChanges($event, 'questionString', i)" placeholder="Enter question text..." />
+
+        <button (click)="removeQuestion(i)">Remove Question</button>
+
+        <!-- Open-ended question -->
+        <div *ngIf="question.type === 'open'">
+        <input type="text" placeholder="User will type the answer..." disabled />
+        </div>
+
+        <!-- Multiple Choice (Checkbox) -->
+        <div *ngIf="question.type === 'checkbox'">
+        <div *ngFor="let option of question.options; let j = index">
+            <input type="checkbox" disabled />
+            <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />
+            <button (click)="removeOption(question, j)">Remove</button>
+        </div>
+        <button (click)="addOption(question)">Add Option</button>
+        </div>
+
+        <!-- Single Choice (Radio Button) -->
+        <div *ngIf="question.type === 'radio'">
+        <div *ngFor="let option of question.options; let j = index">
+            <input type="radio" name="radio-{{ i }}" disabled />
+            <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />
+            <button (click)="removeOption(question, j)">Remove</button>
+        </div>
+        <button (click)="addOption(question)">Add Option</button>
+        </div>
+    </div>
+</div>

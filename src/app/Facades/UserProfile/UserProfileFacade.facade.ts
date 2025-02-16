@@ -28,4 +28,8 @@ export class UserProfileFacade {
     public static register(userDetails: loginInterface) {
         this.impl.register(userDetails);
     }
+
+    public static logOut() {
+        this.impl.logOut();
+    }
 }

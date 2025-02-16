@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { UserProfileFacade } from "../../Facades/UserProfile/UserProfileFacade.facade";
 
 @Component({
@@ -12,7 +12,12 @@ import { UserProfileFacade } from "../../Facades/UserProfile/UserProfileFacade.f
 })
 
 export class NavBarComponent {
+    @Output()
+    logOut: EventEmitter<boolean> = new EventEmitter();
     username: string = UserProfileFacade.getUser()!.username;
 
-    logout() {}
+    logout() {
+       UserProfileFacade.logOut(); 
+       this.logOut.emit(false);
+    }
 }

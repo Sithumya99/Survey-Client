@@ -1,0 +1,25 @@
+<div class="dialog-background">
+    <div
+        [class.dialog-left-container]="dialogSize == mediaSize.medium"
+        [class.dialog-full-container]="dialogSize == mediaSize.large"
+        [class.dialog-center-container]="dialogSize == mediaSize.small"
+    >
+        <div #dlg>
+            <div *ngIf="dialogSize == mediaSize.small; else default" class="dialog-middle">
+                <ng-container *ngTemplateOutlet="default"></ng-container>
+            </div>
+            <ng-template #default>
+                <h1 class="dialog-title">
+                    <div class="dialog-close-btn" *ngIf="closeEnabled">
+                        <!-- <granite-icon class="icon" (click)="close()"> close </granite-icon> -->
+                    </div>
+                    <div class="title" *ngIf="title">{{ title }}</div>
+                </h1>
+                <div class="dialog-content">
+                    <h1>Content</h1>
+                    <!-- <ng-template app-insertion> </ng-template> -->
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

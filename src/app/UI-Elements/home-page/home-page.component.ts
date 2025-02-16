@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
+import { pages } from "../../Interfaces/BasicInterfaces.interface";
 
 
 @Component({
@@ -10,4 +12,8 @@ import { Component } from "@angular/core";
 
 export class HomePageComponent {
     constructor() {}
+
+    getStarted() {
+        BasicdataFacade.setCurrentPage$(pages.loginPage);
+    }
 }

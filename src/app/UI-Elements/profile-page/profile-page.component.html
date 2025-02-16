@@ -1,0 +1,16 @@
+<div class="command-bar">
+    <button (click)="createSurvey()">Create Survey</button>
+    <button (click)="respondSurvey()">Respond to Survey</button>
+</div>
+
+<div class="survey-list">
+    <div *ngIf="surveys.length == 0">
+        <p>The surveys you create will appear here</p>
+    </div>
+    <div *ngFor="let survey of surveys; let i = index">
+        <div class="survey-card">
+            <h1>{{i}}</h1>.
+            <p>{{survey}}</p>
+        </div>
+    </div>
+</div>
