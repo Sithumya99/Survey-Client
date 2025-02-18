@@ -1,4 +1,5 @@
 import { EventEmitter } from "@angular/core";
+import { Section } from "../Classes/section.class";
 
 export enum pages {
     homePage,
@@ -9,7 +10,8 @@ export enum pages {
 
 export enum dialogContentType {
     addSection,
-    addFlow
+    addFlow,
+    addFlowSection
 }
 
 export interface userInterface {
@@ -29,8 +31,9 @@ export interface ConditionInterface {
 }
 
 export interface Column {
-    id: number;
-    section: string;
+    section: Section;
+    flows: number[];
+    condition?: ConditionInterface;
     children: Column[];
 }
 
@@ -48,13 +51,14 @@ export abstract class IDialogModel {
     public closeEvent: EventEmitter<DialogCloseEvent> = new EventEmitter<DialogCloseEvent>();
     public abstract getDialogInterface(): IDialogInterface;
     public abstract close(event: string): void;
+    public abstract getData(): any;
 }
 
 export interface IDialogInterface {
     title: string;
     size: MediaSize;
     contentType: dialogContentType;
-    commands: string[];
+    commands: ICommand[];
     closeEnabled: boolean;
 }
 
@@ -65,7 +69,7 @@ export interface IQuestionOptions {
 
 export interface IConnectedFlow {
     flowId: number;
-    condition: string;
+    condition: ConditionInterface;
 }
 
 export interface IResponseRelevanceRequest {
@@ -77,4 +81,9 @@ export interface IResponseRelevanceRequest {
 export interface IQuestionClarification {
     systemQuestion: string;
     userQuestion: string;
+}
+
+export interface ICommand {
+    name: string;
+    execute?(): void;
 }

@@ -11,13 +11,30 @@
             <ng-template #default>
                 <h1 class="dialog-title">
                     <div class="dialog-close-btn" *ngIf="closeEnabled">
-                        <!-- <granite-icon class="icon" (click)="close()"> close </granite-icon> -->
+                        <button (click)="close()">Close</button>
                     </div>
                     <div class="title" *ngIf="title">{{ title }}</div>
                 </h1>
                 <div class="dialog-content">
-                    <h1>Content</h1>
-                    <!-- <ng-template app-insertion> </ng-template> -->
+                    <div class="add-flow" *ngIf="contentType == dialogComponentType.addFlow">
+                        <app-add-flow [columns]="data.columns"></app-add-flow>
+                    </div>
+
+                    <div class="add-section" *ngIf="contentType == dialogComponentType.addSection">
+                        <app-add-section [section]="data.section"></app-add-section>
+                    </div>
+                    <div class="add-flow-section" *ngIf="contentType == dialogComponentType.addFlowSection">
+                        <app-add-flow-section
+                        [sections]="data.sections"
+                        [parentSection]="data.parentSection"
+                        [satisfiedConditions]="data.satisfiedConditions"
+                        [selectedSection]="data.selectedSection"
+                        [selectedOption]="data.selectedCondition"
+                        ></app-add-flow-section>
+                    </div>
+                </div>
+                <div *ngFor="let command of commands" class="commands">
+                    <button (click)="executeCmd(command)">{{command.name}}</button>
                 </div>
             </ng-template>
         </div>

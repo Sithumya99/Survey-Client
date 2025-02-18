@@ -32,32 +32,6 @@ export class SurveyApplicationComponent {
     isLoggedIn: boolean = UserProfileFacade.getIsLoggedIn();
 
     constructor() {
-        // class TestDialogModel extends IDialogModel {
-
-        //     constructor() {
-        //         super();
-        //     }
-
-        //     public override getDialogInterface(): IDialogInterface {
-        //         return this.createDialog();
-        //     }
-
-        //     public override close(event: string): void {
-        //         this.closeEvent.emit({event});
-        //     }
-
-        //     public createDialog(): IDialogInterface {
-        //         return {
-        //             title: 'Test',
-        //             size: MediaSize.medium,
-        //             commands: [],
-        //             closeEnabled: true
-        //         };
-        //     }
-        // }
-
-        // DialogFacade.open(new TestDialogModel());
-
         BasicdataFacade.getCurrentPage$().subscribe((page: pages) => {
             this.currentPage = page;
         })

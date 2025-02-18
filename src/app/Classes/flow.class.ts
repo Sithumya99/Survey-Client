@@ -1,15 +1,13 @@
 import { ConditionInterface } from "../Interfaces/BasicInterfaces.interface";
 
 export class Flow {
-    surveyId: number;
-    sectionId: number;
+    surveyId: string;
     flowId: number;
     conditions: ConditionInterface[];
-    sectionFlow: string[];
+    sectionFlow: number[];
 
-    constructor(surveyId: number, sectionId: number, flowId: number, conditions: ConditionInterface[], sectionFlow: string[]) {
+    constructor(surveyId: string, flowId: number, conditions: ConditionInterface[], sectionFlow: number[]) {
         this.surveyId = surveyId;
-        this.sectionId = sectionId;
         this.flowId = flowId;
         this.conditions = conditions;
         this.sectionFlow = sectionFlow;
@@ -19,7 +17,12 @@ export class Flow {
         this.conditions.push(condition);
     }
 
-    addSection(sectionId: string) {
+    addSection(sectionId: number) {
         this.sectionFlow.push(sectionId);
+    }
+
+    extendFlow(condition: ConditionInterface, sectionId: number) {
+        this.addCondition(condition);
+        this.addSection(sectionId);
     }
 }

@@ -40,9 +40,4 @@ export class AddSectionComponent {
         let value = (event.target as HTMLInputElement).value;
         question.options[index].option = value;
     }
-
-    saveSection() {
-        //bind to dialog commands
-        //set current survey after all changes made
-    }
 }

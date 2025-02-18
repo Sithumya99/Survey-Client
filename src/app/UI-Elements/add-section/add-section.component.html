@@ -10,12 +10,12 @@
         <button (click)="removeQuestion(i)">Remove Question</button>
 
         <!-- Open-ended question -->
-        <div *ngIf="question.type === 'open'">
+        <div *ngIf="question.questionType === 'open'">
         <input type="text" placeholder="User will type the answer..." disabled />
         </div>
 
         <!-- Multiple Choice (Checkbox) -->
-        <div *ngIf="question.type === 'checkbox'">
+        <div *ngIf="question.questionType === 'checkbox'">
         <div *ngFor="let option of question.options; let j = index">
             <input type="checkbox" disabled />
             <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Single Choice (Radio Button) -->
-        <div *ngIf="question.type === 'radio'">
+        <div *ngIf="question.questionType === 'radio'">
         <div *ngFor="let option of question.options; let j = index">
             <input type="radio" name="radio-{{ i }}" disabled />
             <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />

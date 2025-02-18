@@ -1,13 +1,19 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, Type, ViewChild, ViewEncapsulation } from "@angular/core";
-import { dialogContentType, IDialogModel, MediaSize } from "../../Interfaces/BasicInterfaces.interface";
+import { dialogContentType, ICommand, IDialogInterface, IDialogModel, MediaSize } from "../../Interfaces/BasicInterfaces.interface";
 import { Subject } from "rxjs";
 import { CommonModule } from "@angular/common";
+import { AddFlowComponent } from "../add-flow/add-flow.component";
+import { AddSectionComponent } from "../add-section/add-section.component";
+import { AddFlowSectionComponent } from "../add-flow-section/add-flow-section.component";
 
 @Component({
     selector: 'app-dialog',
     standalone: true,
     imports: [
-        CommonModule
+        CommonModule,
+        AddFlowComponent,
+        AddSectionComponent,
+        AddFlowSectionComponent
     ],
     templateUrl: './dialog-container.component.html',
     styleUrl: './dialog-container.component.scss',
@@ -22,8 +28,11 @@ export class DialogComponent implements AfterViewInit{
     title: string = '';
     contentType: dialogContentType | undefined; //change to a message dlg for default later
     closeEnabled: boolean = true;
+    commands: ICommand[] = [];
     dialogSize: MediaSize = MediaSize.medium;
+    data: any;
     mediaSize = MediaSize;
+    dialogComponentType = dialogContentType;
 
     private readonly _onClose = new Subject<any>();
     public onClose = this._onClose.asObservable();
@@ -33,7 +42,6 @@ export class DialogComponent implements AfterViewInit{
     ngAfterViewInit(): void {
         this.cd.detectChanges();
         this.dialog = window.parent.document.body;
-        //this.dialog.addEventListener('keydown', this.keydownListener, false);
     }
 
     ngOnInit(): void {
@@ -41,22 +49,19 @@ export class DialogComponent implements AfterViewInit{
         if (typeof dialogInterface != 'undefined') {
             this.title = dialogInterface.title;
             this.contentType = dialogInterface.contentType;
-            if (typeof dialogInterface.size != 'undefined') {
-                this.dialogSize = dialogInterface.size;
-            } else {
-                this.dialogSize = MediaSize.medium;
-            } 
-            if (typeof dialogInterface.closeEnabled != 'undefined') {
-                this.closeEnabled = dialogInterface.closeEnabled;
-            } else {
-                this.closeEnabled = false;
-            }
+            this.commands = dialogInterface.commands;
+            this.dialogSize = dialogInterface.size; 
+            this.closeEnabled = dialogInterface.closeEnabled;
         }
+        this.setData();
+    }
+
+    setData() {
+        this.data = this.dialogModel.getData();
     }
 
     ngOnDestroy(): void {
         if (this.componentRef) {
-            //this.dialog?.removeEventListener('keydown', this.keydownListener, false);
             this.componentRef.destroy();
         }
     }
@@ -71,5 +76,13 @@ export class DialogComponent implements AfterViewInit{
     
     public refresh() : void {
         this.cd.detectChanges();
+    }
+
+    executeCmd(command: ICommand) {
+        if (command.execute !== undefined) {
+            command.execute();
+        } else {
+            this.close();
+        }
     }
 }

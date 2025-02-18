@@ -1,6 +1,9 @@
 import { Component, Input } from "@angular/core";
-import { Column } from "../../Interfaces/BasicInterfaces.interface";
+import { Column, ConditionInterface } from "../../Interfaces/BasicInterfaces.interface";
 import { CommonModule } from "@angular/common";
+import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
+import { AddFlowSectionDialogModel } from "../add-flow-section/AddFlowSectionDialogModel.model";
+import { DialogFacade } from "../../Facades/Dialog/DialogFacade.facade";
 
 @Component({
     selector: 'app-grid',
@@ -17,6 +20,7 @@ export class GridComponent {
     columns: Column[] = [];
 
     onSectionClicked(column: Column) {
-        column.children.push({ id: 1, section: column.section, children: []});
+        let addFlowSectionDlg = new AddFlowSectionDialogModel(column);
+        DialogFacade.open(addFlowSectionDlg);
     }
 }

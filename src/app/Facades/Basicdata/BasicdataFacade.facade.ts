@@ -10,10 +10,30 @@ export class BasicdataFacade {
 
     private static impl: BasicdataImplementation = new BasicdataImplementation();
 
+    public static getSectionById(sectionId: number): Section | undefined {
+        let survey = this.impl.getCurrentSurvey();
+        return survey!.sections.find(s => s.sectionId == sectionId);
+    }
+
+    public static getFlowById(flowId: number): Flow | undefined {
+        let survey = this.impl.getCurrentSurvey();
+        return survey!.flows.find(f => f.flowId == flowId);
+    }
+
+    public static getNextFlowId(): number {
+        let survey = this.impl.getCurrentSurvey();
+        if (survey!.flows.length == 0) {
+            return 1;
+        } else {
+            return survey!.flows[-1].flowId + 1;
+        }
+    }
+
     public static mapFlowsToColumns(flows: Flow[]): Column[] {
+        let flowIds: number[] = flows.map(f => f.flowId);
         const root: Column = {
-            id: 1,
-            section: flows[0].sectionFlow[0],
+            section: this.getSectionById(flows[0].sectionFlow[0])!,
+            flows: flowIds,
             children: []
         };
         let columns: Column[] = [root];
@@ -24,15 +44,17 @@ export class BasicdataFacade {
             for( let i = 1; i < flow.sectionFlow.length; i++) {
                 let sectionId = flow.sectionFlow[i];
 
-                let existingColumn: Column | undefined = currentLevel.find(col => col.section == sectionId);
+                let existingColumn: Column | undefined = currentLevel.find(col => col.section.sectionId == sectionId);
 
                 if (!existingColumn) {
                     existingColumn = {
-                        id: flow.flowId,
-                        section: sectionId,
+                        section: this.getSectionById(sectionId)!,
+                        flows: [flow.flowId],
                         children: []
                     };
                     currentLevel.push(existingColumn);
+                } else {
+                    existingColumn.flows.push(flow.flowId);
                 }
 
                 currentLevel = existingColumn.children;
@@ -44,24 +66,26 @@ export class BasicdataFacade {
 
     public static mapColumnsToFlows(columns: Column[]): Flow[] {
         let flows: Flow[] = [];
-        let flowIdCounter: number = 1;
+        let surveyId: string = this.impl.getCurrentSurvey()!.surveyId;
 
         for (let column of columns) {
-            this.traverseColumns(column, [], flows, flowIdCounter);
+            this.traverseColumns(column, [], flows, surveyId);
         }
 
         return flows;
     }
 
-    public static traverseColumns(column: Column, path: string[], flows: Flow[], flowId: number) {
-        let newPath = [...path, column.section];
+    public static traverseColumns(column: Column, path: number[], flows: Flow[], surveyId: string) {
+        let newPath: number[] = [...path, column.section.sectionId];
 
         if (column.children.length == 0) {
-            flows.push(new Flow(0, 1, flowId, [], newPath));
-            flowId++;
+            //leaf node
+            column.flows.forEach(flow => {
+                flows.push(new Flow(surveyId, flow, [], newPath));
+            });
         } else {
             for (let child of column.children) {
-                this.traverseColumns(child, newPath, flows, flowId);
+                this.traverseColumns(child, newPath, flows, surveyId);
             }
         }
     }
@@ -72,6 +96,10 @@ export class BasicdataFacade {
 
     public static setCurrentSurvey$(survey: Survey) {
         this.impl.setCurrentSurvey$(survey);
+    }
+
+    public static getCurrentSurvey(): Survey | undefined {
+        return this.impl.getCurrentSurvey();
     }
 
     public static getCurrentPage$(): Observable<pages> {
@@ -90,6 +118,12 @@ export class BasicdataFacade {
         this.impl.setSurveyIds$(surveys);
     }
 
+    public static addFlow(flow: Flow) {
+        let survey = this.impl.getCurrentSurvey();
+        survey!.flows.push(flow);
+        this.impl.setCurrentSurvey$(survey!);
+    }
+
     public static createNewSurvey() {
         let userId = UserProfileFacade.getUser()!.id;
         let newSurvey: Survey = new Survey('-1', userId);
@@ -102,8 +136,12 @@ export class BasicdataFacade {
             sectionId = survey.sections[-1].sectionId + 1;
         }
         let newSection: Section = new Section(survey.surveyId, sectionId);
-        survey.sections.push(newSection);
         return newSection;
+    }
+
+    public static addSectionToSurvey(section: Section) {
+        let survey = this.impl.getCurrentSurvey()!;
+        survey.sections.push(section);
     }
 
     public static addFlows(flowPaths: Flow[]) {
@@ -116,6 +154,19 @@ export class BasicdataFacade {
         //validate survey
         let survey: Survey = this.impl.getCurrentSurvey()!;
         await this.impl.saveSurvey(survey);
+    }
+
+    private static validateSurvey(survey: Survey): string {
+        if (survey.surveyTitle == "") {
+            return "Empty survey title";
+        }
+        if (survey.surveyDescription == "") {
+            return "Empty survey description";
+        }
+        if (survey.sections.length == 0) {
+            return "No sections in survey";
+        }
+        return "";
     }
 
     public static getResponseRelevance(questionDetails: IResponseRelevanceRequest) {

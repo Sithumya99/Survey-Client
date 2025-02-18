@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Flow } from "../../Classes/flow.class";
 import { GridComponent } from "../grid/grid.component";
 import { Column } from "../../Interfaces/BasicInterfaces.interface";
@@ -14,24 +14,12 @@ import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade"
 })
 
 export class AddFlowComponent {
-    flowPaths: Flow[] = [];
+    @Input()
     columns: Column[] = [];
 
-    constructor() {
-        BasicdataFacade.getCurrentSurvey$().subscribe(survey => {
-            if (survey !== undefined) {
-                this.flowPaths = survey.flows;
-            }
-        });
-    }
+    constructor() {}
 
     getColumn(): Column[] {
-        this.columns = BasicdataFacade.mapFlowsToColumns(this.flowPaths);
         return this.columns;
-    }
-
-    saveFlows() {
-        this.flowPaths = BasicdataFacade.mapColumnsToFlows(this.columns);
-        BasicdataFacade.addFlows(this.flowPaths);
     }
 }
