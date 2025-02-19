@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
-import { pages } from "../../Interfaces/BasicInterfaces.interface";
+import { IUserSurveys, pages } from "../../Interfaces/BasicInterfaces.interface";
 
 @Component({
     selector: 'app-profile-page',
@@ -13,7 +13,7 @@ import { pages } from "../../Interfaces/BasicInterfaces.interface";
 })
 
 export class ProfilePageComponent {
-    surveys: string[] = [];
+    surveys: IUserSurveys[] = [];
 
     constructor() {
         BasicdataFacade.getSurveyIds$().subscribe(surveyIds => {

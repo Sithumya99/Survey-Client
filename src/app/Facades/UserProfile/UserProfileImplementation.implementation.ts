@@ -3,6 +3,7 @@ import { User } from "../../Classes/user.class";
 import { loginInterface, pages } from "../../Interfaces/BasicInterfaces.interface";
 import { CommunicationService } from "../../Services/CommunicationService.service";
 import { BasicdataFacade } from "../Basicdata/BasicdataFacade.facade";
+import { MessageFacade } from "../Message/MessageFacade.facade";
 
 export class UserProfileImplementation {
     private authToken: string | undefined;
@@ -44,6 +45,7 @@ export class UserProfileImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             );
@@ -61,6 +63,7 @@ export class UserProfileImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )

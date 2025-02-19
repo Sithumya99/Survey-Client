@@ -56,6 +56,10 @@ export class DialogComponent implements AfterViewInit{
         this.setData();
     }
 
+    getDialogModel(): IDialogModel {
+        return this.dialogModel;
+    }
+
     setData() {
         this.data = this.dialogModel.getData();
     }

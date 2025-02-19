@@ -9,32 +9,29 @@
                 <ng-container *ngTemplateOutlet="default"></ng-container>
             </div>
             <ng-template #default>
-                <h1 class="dialog-title">
-                    <div class="dialog-close-btn" *ngIf="closeEnabled">
-                        <button (click)="close()">Close</button>
+                <div class="content-container">
+                    <h1 class="dialog-title">
+                        <div class="dialog-close-btn" *ngIf="closeEnabled">
+                            <button (click)="close()">Close</button>
+                        </div>
+                        <div class="title" *ngIf="title">{{ title }}</div>
+                    </h1>
+                    <div class="dialog-content">
+                        <div class="add-flow" *ngIf="contentType == dialogComponentType.addFlow">
+                            <app-add-flow [addFlowDialogModel]="getDialogModel()"></app-add-flow>
+                        </div>
+                        <div class="add-section" *ngIf="contentType == dialogComponentType.addSection">
+                            <app-add-section [section]="data.section"></app-add-section>
+                        </div>
+                        <div class="add-flow-section" *ngIf="contentType == dialogComponentType.addFlowSection">
+                            <app-add-flow-section
+                            [addFlowSectionDialog]="getDialogModel()"
+                            ></app-add-flow-section>
+                        </div>
                     </div>
-                    <div class="title" *ngIf="title">{{ title }}</div>
-                </h1>
-                <div class="dialog-content">
-                    <div class="add-flow" *ngIf="contentType == dialogComponentType.addFlow">
-                        <app-add-flow [columns]="data.columns"></app-add-flow>
+                    <div *ngFor="let command of commands" class="commands">
+                        <button (click)="executeCmd(command)">{{command.name}}</button>
                     </div>
-
-                    <div class="add-section" *ngIf="contentType == dialogComponentType.addSection">
-                        <app-add-section [section]="data.section"></app-add-section>
-                    </div>
-                    <div class="add-flow-section" *ngIf="contentType == dialogComponentType.addFlowSection">
-                        <app-add-flow-section
-                        [sections]="data.sections"
-                        [parentSection]="data.parentSection"
-                        [satisfiedConditions]="data.satisfiedConditions"
-                        [selectedSection]="data.selectedSection"
-                        [selectedOption]="data.selectedCondition"
-                        ></app-add-flow-section>
-                    </div>
-                </div>
-                <div *ngFor="let command of commands" class="commands">
-                    <button (click)="executeCmd(command)">{{command.name}}</button>
                 </div>
             </ng-template>
         </div>

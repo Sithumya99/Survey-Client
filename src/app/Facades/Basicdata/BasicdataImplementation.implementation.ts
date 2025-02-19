@@ -3,12 +3,14 @@ import { Survey } from "../../Classes/survey.class";
 import { CommunicationService } from "../../Services/CommunicationService.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { UserProfileFacade } from "../UserProfile/UserProfileFacade.facade";
-import { IQuestionClarification, IResponseRelevanceRequest, pages } from "../../Interfaces/BasicInterfaces.interface";
+import { IQuestionClarification, IResponseRelevanceRequest, IUserSurveys, pages } from "../../Interfaces/BasicInterfaces.interface";
+import { MessageFacade } from "../Message/MessageFacade.facade";
+import { BasicdataFacade } from "./BasicdataFacade.facade";
 
 export class BasicdataImplementation {
     private currentSurvey: BehaviorSubject<Survey | undefined> = new BehaviorSubject<Survey | undefined>(undefined);
     private currentPage: BehaviorSubject<pages> = new BehaviorSubject<pages>(pages.homePage);
-    private surveyIds: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    private surveyIds: BehaviorSubject<IUserSurveys[]> = new BehaviorSubject<IUserSurveys[]>([]);
 
     getCurrentSurvey$(): Observable<Survey | undefined> {
         return this.currentSurvey.asObservable();
@@ -30,23 +32,27 @@ export class BasicdataImplementation {
         this.currentPage.next(currentPage);
     }
 
-    getSurveyIds$(): Observable<string[]> {
+    getSurveyIds$(): Observable<IUserSurveys[]> {
         return this.surveyIds.asObservable();
     }
 
-    setSurveyIds$(surveyIds: string[]) {
+    setSurveyIds$(surveyIds: IUserSurveys[]) {
         this.surveyIds.next(surveyIds);
     }
 
     saveSurvey(survey: Survey): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("createsurvey", survey).subscribe(
+            CommunicationService.http.postFromSurveyServer("createsurvey", {username: UserProfileFacade.getUser()!.username, ...survey}).subscribe(
                 async (result) => {
-                    UserProfileFacade.getUser()!.surveys.push(result); //returns id of newly created survey
+                    UserProfileFacade.getUser()!.surveys.push(result.surveyId); //returns id of newly created survey
                     this.setSurveyIds$(UserProfileFacade.getUser()!.surveys);
+                    MessageFacade.setInfoMsg$("Survey created!");
+                    BasicdataFacade.setCurrentPage$(pages.profilePage);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
+                    BasicdataFacade.setCurrentPage$(pages.profilePage);
                     reject(err);
                 }
             )
@@ -55,11 +61,12 @@ export class BasicdataImplementation {
 
     getResponseEvaluation(questionDetails: IResponseRelevanceRequest): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getresponseevaluation", questionDetails).subscribe(
+            CommunicationService.http.postFromSurveyServer("getresponseevaluation", { username: UserProfileFacade.getUser()!.username, questionDetails}).subscribe(
                 async (result) => {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )
@@ -68,11 +75,12 @@ export class BasicdataImplementation {
 
     getClarification(clarificationDetails: IQuestionClarification): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getclarification", clarificationDetails).subscribe(
+                CommunicationService.http.postFromSurveyServer("getclarification", {username: UserProfileFacade.getUser()!.username, clarificationDetails}).subscribe(
                 async (result) => {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )
@@ -81,11 +89,12 @@ export class BasicdataImplementation {
 
     getSurvey(surveyId: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getsurvey", surveyId).subscribe(
+            CommunicationService.http.postFromSurveyServer("getsurvey", { username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
                 async (result) => {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )
@@ -94,11 +103,13 @@ export class BasicdataImplementation {
 
     submitResponse(response: Response): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("submitresponse", response).subscribe(
+            CommunicationService.http.postFromSurveyServer("submitresponse", {username: UserProfileFacade.getUser()!.username, response}).subscribe(
                 async (result) => {
+                    MessageFacade.setInfoMsg$("Response is submitted!")
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )
@@ -107,11 +118,12 @@ export class BasicdataImplementation {
 
     getSurveyMetrics(surveyId: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getsurveydetails", surveyId).subscribe(
+            CommunicationService.http.postFromSurveyServer("getsurveydetails", {username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
                 async (result) => {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
                     reject(err);
                 }
             )

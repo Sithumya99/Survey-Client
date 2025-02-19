@@ -1,9 +1,9 @@
-import { userInterface } from "../Interfaces/BasicInterfaces.interface";
+import { IUserSurveys, userInterface } from "../Interfaces/BasicInterfaces.interface";
 
 export class User {
     id: string;
     username: string = "";
-    surveys: string[] = [];
+    surveys: IUserSurveys[] = [];
 
     constructor(userDetails: userInterface) {
         this.id = userDetails.id;
@@ -11,7 +11,7 @@ export class User {
         this.surveys = userDetails.surveys;
     }
 
-    public getSurveyById(index: number): string {
+    public getSurveyById(index: number): IUserSurveys {
         return this.surveys[index] || "";
     }
 }

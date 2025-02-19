@@ -11,6 +11,7 @@ export class Survey {
     sections: Section[] = [];
     responses: Response[] = [];
     flows: Flow[] = [];
+    startSection: string = "";
     requiresLogin: boolean = false;
 
     constructor(surveyId: string, owner: string) {

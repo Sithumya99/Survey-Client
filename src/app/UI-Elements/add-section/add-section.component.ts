@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 import { Section } from "../../Classes/section.class";
 import { CommonModule } from "@angular/common";
 import { Question } from "../../Classes/question.class";
+import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
 
 @Component({
     selector: 'app-add-section',
@@ -18,6 +19,10 @@ export class AddSectionComponent {
 
     removeQuestion(index: number) {
         this.section!.questions.splice(index, 1);
+    }
+
+    addQuestion(type: string) {
+        BasicdataFacade.addQuestion(this.section!, type);
     }
 
     removeOption(question: Question, index: number) {

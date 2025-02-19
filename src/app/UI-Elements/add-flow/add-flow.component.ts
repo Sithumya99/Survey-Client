@@ -1,7 +1,7 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { Flow } from "../../Classes/flow.class";
 import { GridComponent } from "../grid/grid.component";
-import { Column } from "../../Interfaces/BasicInterfaces.interface";
+import { Column, IDialogModel } from "../../Interfaces/BasicInterfaces.interface";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
 
 @Component({
@@ -13,13 +13,26 @@ import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade"
     templateUrl: './add-flow.component.html'
 })
 
-export class AddFlowComponent {
+export class AddFlowComponent implements OnInit {
     @Input()
+    addFlowDialogModel: IDialogModel | undefined;
     columns: Column[] = [];
 
-    constructor() {}
+    constructor(private cdr: ChangeDetectorRef) {}
 
-    getColumn(): Column[] {
-        return this.columns;
+    ngOnInit(): void {
+        if (this.addFlowDialogModel) {
+            let data = this.addFlowDialogModel!.getData();
+            this.columns = data.columns;
+        }
+
+        BasicdataFacade.getCurrentSurvey$().subscribe(survey => {
+            if (survey !== undefined && this.addFlowDialogModel !== undefined) {
+                let data = this.addFlowDialogModel!.getData();
+                this.columns = [...data.columns];
+                this.cdr.detectChanges();
+            }
+        });
     }
+
 }

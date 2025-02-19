@@ -1,3 +1,4 @@
+import { MessageFacade } from "../Facades/Message/MessageFacade.facade";
 import { IConnectedFlow } from "../Interfaces/BasicInterfaces.interface";
 import { Question } from "./question.class";
 
@@ -27,5 +28,21 @@ export class Section {
             case 'questionString':
                 this.questions[index!].questionString = value;
         }
+    }
+
+    validate(): boolean {
+        if (this.surveyId == "") {
+            MessageFacade.setErrorMsg$("Invalid survey id");
+            return false;
+        }
+        if (this.sectionTitle == "") {
+            MessageFacade.setErrorMsg$("Section must have a title");
+            return false;
+        }
+        if (this.questions.length == 0) {
+            MessageFacade.setErrorMsg$("Section must have atleast one question");
+            return false;
+        }
+        return true;
     }
 }

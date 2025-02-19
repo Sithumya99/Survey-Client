@@ -9,8 +9,7 @@
     </div>
     <div *ngFor="let survey of surveys; let i = index">
         <div class="survey-card">
-            <h1>{{i}}</h1>.
-            <p>{{survey}}</p>
+            <h1>{{i + '. ' + survey.surveyTitle}}</h1>
         </div>
     </div>
 </div>

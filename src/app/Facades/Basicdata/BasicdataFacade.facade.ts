@@ -1,10 +1,12 @@
 import { Observable } from "rxjs";
 import { Flow } from "../../Classes/flow.class";
 import { Survey } from "../../Classes/survey.class";
-import { Column, IQuestionClarification, IResponseRelevanceRequest, pages } from "../../Interfaces/BasicInterfaces.interface";
+import { Column, IQuestionClarification, IResponseRelevanceRequest, IUserSurveys, pages } from "../../Interfaces/BasicInterfaces.interface";
 import { UserProfileFacade } from "../UserProfile/UserProfileFacade.facade";
 import { BasicdataImplementation } from "./BasicdataImplementation.implementation";
 import { Section } from "../../Classes/section.class";
+import { MessageFacade } from "../Message/MessageFacade.facade";
+import { Question } from "../../Classes/question.class";
 
 export class BasicdataFacade {
 
@@ -13,6 +15,13 @@ export class BasicdataFacade {
     public static getSectionById(sectionId: number): Section | undefined {
         let survey = this.impl.getCurrentSurvey();
         return survey!.sections.find(s => s.sectionId == sectionId);
+    }
+
+    public static reloadSurvey() {
+        let survey = this.impl.getCurrentSurvey();
+        if (survey !== undefined) {
+            this.impl.setCurrentSurvey$(survey);
+        }
     }
 
     public static getFlowById(flowId: number): Flow | undefined {
@@ -25,7 +34,7 @@ export class BasicdataFacade {
         if (survey!.flows.length == 0) {
             return 1;
         } else {
-            return survey!.flows[-1].flowId + 1;
+            return survey!.flows[survey!.flows.length - 1].flowId + 1;
         }
     }
 
@@ -110,11 +119,11 @@ export class BasicdataFacade {
         this.impl.setCurrentPage$(page);
     }
 
-    public static getSurveyIds$(): Observable<string[]> {
+    public static getSurveyIds$(): Observable<IUserSurveys[]> {
         return this.impl.getSurveyIds$();
     }
 
-    public static setSurveyIds$(surveys: string[]) {
+    public static setSurveyIds$(surveys: IUserSurveys[]) {
         this.impl.setSurveyIds$(surveys);
     }
 
@@ -126,14 +135,15 @@ export class BasicdataFacade {
 
     public static createNewSurvey() {
         let userId = UserProfileFacade.getUser()!.id;
-        let newSurvey: Survey = new Survey('-1', userId);
+        let newSurveyId = UserProfileFacade.getUser()!.surveys.length == 0 ? 1: UserProfileFacade.getUser()!.surveys.length + 1;
+        let newSurvey: Survey = new Survey('Sur' + newSurveyId, userId);
         this.impl.setCurrentSurvey$(newSurvey);
     }
 
     public static addSection(survey: Survey): Section {
         let sectionId: number = 1;
         if (survey.sections.length > 0) {
-            sectionId = survey.sections[-1].sectionId + 1;
+            sectionId = survey.sections[survey.sections.length - 1].sectionId + 1;
         }
         let newSection: Section = new Section(survey.surveyId, sectionId);
         return newSection;
@@ -142,6 +152,9 @@ export class BasicdataFacade {
     public static addSectionToSurvey(section: Section) {
         let survey = this.impl.getCurrentSurvey()!;
         survey.sections.push(section);
+        if (survey.startSection == '') {
+            survey.startSection = section.sectionId.toString();
+        }
     }
 
     public static addFlows(flowPaths: Flow[]) {
@@ -151,22 +164,40 @@ export class BasicdataFacade {
     }
 
     public static async saveSurvey() {
-        //validate survey
         let survey: Survey = this.impl.getCurrentSurvey()!;
-        await this.impl.saveSurvey(survey);
+        if (this.validateSurvey(survey)) {
+            await this.impl.saveSurvey(survey);
+        }
     }
 
-    private static validateSurvey(survey: Survey): string {
+    public static addQuestion(section: Section, type: string) {
+        let questionId = 1;
+        if (section.questions.length > 0) questionId = section.questions.length + 1;
+        section.questions.push(new Question(section.sectionId, section.surveyId, questionId, type));
+    }
+
+    private static validateSurvey(survey: Survey): boolean {
         if (survey.surveyTitle == "") {
-            return "Empty survey title";
+            MessageFacade.setErrorMsg$("Empty survey title");
+            return false;
         }
         if (survey.surveyDescription == "") {
-            return "Empty survey description";
+            MessageFacade.setErrorMsg$("Empty survey description");
+            return false;
         }
         if (survey.sections.length == 0) {
-            return "No sections in survey";
+            MessageFacade.setErrorMsg$("No sections in survey");
+            return false;
         }
-        return "";
+        if (survey.startSection == "") {
+            MessageFacade.setErrorMsg$("Survey must have a start section");
+            return false;
+        }
+        if (survey.flows.length == 0) {
+            MessageFacade.setErrorMsg$("Survey must have atleast one flow");
+            return false;
+        }
+        return true;
     }
 
     public static getResponseRelevance(questionDetails: IResponseRelevanceRequest) {

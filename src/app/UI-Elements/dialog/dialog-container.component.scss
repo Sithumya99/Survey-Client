@@ -56,13 +56,20 @@
     border-style: solid;
     border-color: gray;
 
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        height: fit-content;
+    }
+
     .dialog-content {
         margin: 0;
         padding: 20px;
         display: block;
         overflow-y: auto;
         overflow-x: hidden;
-        height: 95vh;
+        height: fit-content;
     }
  
     .dialog-title {

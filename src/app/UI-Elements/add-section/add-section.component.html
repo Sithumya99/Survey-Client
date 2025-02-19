@@ -4,6 +4,12 @@
         <input type="text" name="description" id="description" (input)="saveChanges($event, 'description')" placeholder="Add Section description..."/>
     </div>
 
+    <div class="add-question">
+        <button (click)="addQuestion('checkbox')">Add Checkbox Question</button>
+        <button (click)="addQuestion('radio')">Add Radio Question</button>
+        <button (click)="addQuestion('open')">Add Open Question</button>
+    </div>
+
     <div class="questions" *ngFor="let question of section!.questions; let i = index">
         <input type="text" (input)="saveChanges($event, 'questionString', i)" placeholder="Enter question text..." />
 

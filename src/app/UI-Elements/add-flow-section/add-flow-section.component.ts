@@ -1,8 +1,9 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { Section } from "../../Classes/section.class";
-import { ConditionInterface } from "../../Interfaces/BasicInterfaces.interface";
+import { ConditionInterface, IDialogModel } from "../../Interfaces/BasicInterfaces.interface";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
 import { CommonModule } from "@angular/common";
+import { AddFlowSectionDialogModel } from "./AddFlowSectionDialogModel.model";
 
 @Component({
     selector: 'app-add-flow-section',
@@ -13,19 +14,24 @@ import { CommonModule } from "@angular/common";
     templateUrl: './add-flow-section.component.html'
 })
 
-export class AddFlowSectionComponent {
-    @Input()
+export class AddFlowSectionComponent implements OnInit {
     sections: Section[] = [];
-    @Input()
     parentSection: Section | undefined;
-    @Input()
     satisfiedConditions: ConditionInterface[] = [];
-
-    @Input()
     selectedSection: Section | undefined;
     selectedQuestion: number = -1;
-    @Input()
     selectedOption: ConditionInterface = { questionNo: -1, answerNo: -1 };
+    @Input()
+    addFlowSectionDialog: IDialogModel | undefined;
+
+    ngOnInit(): void {
+        let data = this.addFlowSectionDialog!.getData();
+        this.sections = data.sections;
+        this.parentSection = data.parentSection;
+        this.satisfiedConditions = data.satisfiedConditions;
+        this.selectedSection = data.selectedSection;
+        this.selectedOption = data.selectedCondition;
+    }
 
     addSelectedQuestion(index: number) {
         this.selectedQuestion = index;
@@ -45,9 +51,13 @@ export class AddFlowSectionComponent {
             questionNo: qNo,
             answerNo: aNo
         };
+        if (this.addFlowSectionDialog!.update !== undefined)
+            this.addFlowSectionDialog!.update('selectedCondition', this.selectedOption);
     }
 
     setNextSection(event: Event) {
         this.selectedSection = BasicdataFacade.getSectionById(+(event.target as HTMLSelectElement).value);
+        if (this.addFlowSectionDialog!.update !== undefined)
+            this.addFlowSectionDialog!.update('selectedSection', this.selectedSection);
     }
 }

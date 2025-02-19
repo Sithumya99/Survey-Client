@@ -17,7 +17,7 @@ export class AddFlowSectionDialogModel extends IDialogModel {
         super();
 
         this.parentSection = column.section;
-        this.currentFlowId = column.flows[-1];
+        this.currentFlowId = column.flows[column.flows.length - 1];
         if (column.children.length == 0) {
             this.nextFlowId = this.currentFlowId;
         } else {
@@ -65,6 +65,7 @@ export class AddFlowSectionDialogModel extends IDialogModel {
     private setSections(column: Column) {
         let flow = BasicdataFacade.getFlowById(this.currentFlowId);
         let sectionIndex = flow!.sectionFlow.findIndex(sf => sf == this.parentSection.sectionId);
+        if (sectionIndex == 0) sectionIndex = 1;
         let existingSections: number[] = [];
 
         for (let i = 0; i < sectionIndex + 1; i++) {
@@ -77,6 +78,7 @@ export class AddFlowSectionDialogModel extends IDialogModel {
                 this.sections.push(section);
             }
         });
+        this.selectedSection = this.sections[0];
     }
 
     private save() {
@@ -87,6 +89,7 @@ export class AddFlowSectionDialogModel extends IDialogModel {
                 //leaf node -> add to same flow
                 let flow = BasicdataFacade.getFlowById(this.currentFlowId);
                 flow!.extendFlow(this.selectedCondition, this.selectedSection!.sectionId);
+                BasicdataFacade.reloadSurvey();
             } else {
                 //new leaf -> create new flow
                 let flow = BasicdataFacade.getFlowById(this.currentFlowId); //to copy necessary from existing
@@ -100,6 +103,15 @@ export class AddFlowSectionDialogModel extends IDialogModel {
                 let newFlow = new Flow(flow!.surveyId, this.nextFlowId, copyConditions, copySectionFlow);
                 BasicdataFacade.addFlow(newFlow);
             }
+            this.close('cancel');
+        }
+    }
+
+    public override update(field: string, value: any) {
+        if (field == 'selectedCondition') {
+            this.selectedCondition = value;
+        } else if (field == 'selectedSection') {
+            this.selectedSection = value;
         }
     }
 

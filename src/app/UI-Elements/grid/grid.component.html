@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
         <div *ngFor="let column of columns" class="column">
-            <div class="cell">{{ column.section }} 
-                <div class="add-btn" (click)="onSectionClicked(column)">+</div>
+            <div class="cell">{{ column.section.sectionId + '. ' + column.section.sectionTitle }} 
+                <div class="add-btn"><button (click)="onSectionClicked(column)">+</button></div>
             </div>
             <div *ngIf="column.children.length > 0">
                 <app-grid [columns]="column.children"></app-grid>

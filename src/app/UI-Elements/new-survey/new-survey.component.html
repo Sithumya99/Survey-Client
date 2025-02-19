@@ -1,7 +1,7 @@
 <div class="container">
     <div class="title">
-        <h1>{{survey!.surveyTitle}}</h1>
-        <p>{{survey!.surveyDescription}}</p>
+        <input type="text" name="title" [value]="survey!.surveyTitle" id="" (change)="setSurvey($event, 'title')" placeholder="Enter Survey Title...">
+        <input type="text" name="description" [value]="survey!.surveyDescription" (change)="setSurvey($event, 'description')" placeholder="Enter Survey Description...">
     </div>
 
     <div class="requires-login">
@@ -17,6 +17,13 @@
         <div class="add-section-cmd">
             <button (click)="addSection()">Add Section</button>
         </div>
+    </div>
+
+    <div class="start-section" *ngIf="survey!.sections.length !== 0">
+        <p>Start section: </p>
+        <select id="options" (change)="setStartSection($event)">
+        <option *ngFor="let section of sections" [value]="section.sectionId">{{section.sectionId + '. ' + section.sectionTitle}}</option>
+        </select>
     </div>
 
     <div class="flows">

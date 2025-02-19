@@ -29,7 +29,7 @@ export class CommunicationService {
 
     private extractData(res: HttpResponse<any>) {
         let body = res.body;
-        let authHeader = res.headers.get('Authorization');
+        let authHeader = body.token;
         if (authHeader) {
             UserProfileFacade.setAuthToken(authHeader);
         }

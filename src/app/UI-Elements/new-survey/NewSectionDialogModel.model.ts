@@ -39,8 +39,10 @@ export class NewSectionDialogModel extends IDialogModel {
     }
 
     private saveSection() {
-        //validate section properties
-        BasicdataFacade.addSectionToSurvey(this.section);
+        if (this.section.validate()) {
+            BasicdataFacade.addSectionToSurvey(this.section);
+            this.close('cancel');
+        }
     }
 
     public override getData() {

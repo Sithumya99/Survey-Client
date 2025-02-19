@@ -28,6 +28,8 @@ export class DialogFacade {
         const domElm = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
         window.parent.document.body.appendChild(domElm);
 
+        this.dialogComponentsRef.push(componentRef);
+
         return new Promise(function (resolve, reject) {
             let sub = model.closeEvent.subscribe((event) => {
                 sub.unsubscribe();

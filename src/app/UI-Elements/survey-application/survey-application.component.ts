@@ -1,5 +1,5 @@
 import { Component, EventEmitter } from "@angular/core";
-import { DialogCloseEvent, IDialogInterface, IDialogModel, MediaSize, pages } from "../../Interfaces/BasicInterfaces.interface";
+import { DialogCloseEvent, IDialogInterface, IDialogModel, MediaSize, messageType, pages } from "../../Interfaces/BasicInterfaces.interface";
 import { CommonModule } from "@angular/common";
 import { NavBarComponent } from "../nav-bar/nav-bar.component";
 import { HomePageComponent } from "../home-page/home-page.component";
@@ -10,6 +10,8 @@ import { DialogFacade } from "../../Facades/Dialog/DialogFacade.facade";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
 import { ProfilePageComponent } from "../profile-page/profile-page.component";
 import { NewSurveyComponent } from "../new-survey/new-survey.component";
+import { MessageFacade } from "../../Facades/Message/MessageFacade.facade";
+import { MsgDialogModel } from "../../Facades/Message/MsgDialogModel.model";
 
 @Component({
     selector: 'app-survey-application',
@@ -35,6 +37,20 @@ export class SurveyApplicationComponent {
         BasicdataFacade.getCurrentPage$().subscribe((page: pages) => {
             this.currentPage = page;
         })
+
+        MessageFacade.getInfoMsg$().subscribe((msg: string) => {
+            if (msg.length !== 0) {
+                let dialog = new MsgDialogModel(msg, messageType.info);
+                DialogFacade.open(dialog);
+            }
+        });
+
+        MessageFacade.getErrorMsg$().subscribe((error: string) => {
+            if (error.length !== 0) {
+                let dialog = new MsgDialogModel(error, messageType.error);
+                DialogFacade.open(dialog);
+            }
+        });
     }
 
     logOut() {
