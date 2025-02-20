@@ -1,0 +1,82 @@
+.chatbot {
+    display: grid;
+    grid-template-rows: 1fr 20vh;  
+    background: #f3f1f3; 
+    box-sizing: border-box;
+    grid-template-rows: 2rem 1fr 4rem;
+    height: 100vh; 
+    font-size: .7rem;  
+    overflow: hidden; 
+    border-radius: 15px;
+    box-shadow: 0 0 128px 0 rgba(0,0,0,0.1),
+    0 32px 64px -48px rgba(0,0,0,0.5);
+}
+
+.chat {
+    overflow-y: auto;    
+    height: 100%;
+    border-radius: 15px;
+    margin-top: 0.2rem;
+}
+
+.chat-question {    
+    background: #eee;
+    padding: 0.9rem 1.1rem;
+    margin: 1.5rem 0.2rem 1.5rem 1.8rem;
+    border-radius: 10px 0px 10px 10px;
+    box-shadow: 0px 0px 10px rgba(237, 235, 235, 0.5);
+    color: #000000;
+    font-size: 0.95rem;
+    background: #ffffff;
+}
+
+.chat-answer {    
+    background: #c3eeb0;
+    padding: 0.9rem 1.1rem;
+    margin: 0.2rem 1.8rem 1.5rem 0.8rem;
+    border-radius: 0px 10px 10px 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 10px rgba(237, 235, 235, 0.5);
+    color: #ffffff;
+    font-size: 0.95rem;
+    background: #724ae8;
+}
+
+.input-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9e5e5;
+    border-top: 1px solid #ddd;
+}
+
+.input-field {  
+    height: clamp(1rem, 3vw, 1.5rem);
+    width: 80%;
+    border-radius: .5rem;
+    padding-inline: .5rem;
+    padding-block: .3rem;
+}
+
+.input-and-commands{
+    position: relative;
+}
+
+.chatbot-header {
+    background-color: #724ae8;
+    color: #fff;
+    padding: 0;
+    font-size: 1.0rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 2rem;
+}
+
+.no-border {
+    border: none;
+    background-color: transparent;
+}

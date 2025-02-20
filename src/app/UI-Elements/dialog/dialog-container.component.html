@@ -28,6 +28,11 @@
                             [addFlowSectionDialog]="getDialogModel()"
                             ></app-add-flow-section>
                         </div>
+                        <div class="message" *ngIf="contentType == dialogComponentType.message">
+                            <app-message
+                            [messageDialog]="getDialogModel()"
+                            ></app-message>
+                        </div>
                     </div>
                     <div *ngFor="let command of commands" class="commands">
                         <button (click)="executeCmd(command)">{{command.name}}</button>

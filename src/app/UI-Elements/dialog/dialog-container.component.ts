@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import { AddFlowComponent } from "../add-flow/add-flow.component";
 import { AddSectionComponent } from "../add-section/add-section.component";
 import { AddFlowSectionComponent } from "../add-flow-section/add-flow-section.component";
+import { MessageComponent } from "../message/message.component";
 
 @Component({
     selector: 'app-dialog',
@@ -13,7 +14,8 @@ import { AddFlowSectionComponent } from "../add-flow-section/add-flow-section.co
         CommonModule,
         AddFlowComponent,
         AddSectionComponent,
-        AddFlowSectionComponent
+        AddFlowSectionComponent,
+        MessageComponent
     ],
     templateUrl: './dialog-container.component.html',
     styleUrl: './dialog-container.component.scss',

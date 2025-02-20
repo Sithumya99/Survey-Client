@@ -12,8 +12,10 @@ export class MsgDialogModel extends IDialogModel {
     }
 
     setDialogInterface(): IDialogInterface {
+        let title = "";
+        this.type == messageType.info ? title = "Info" : title = "Error";
         return {
-            title: "Info",
+            title: title,
             size: MediaSize.small,
             closeEnabled: true,
             contentType: dialogContentType.message,

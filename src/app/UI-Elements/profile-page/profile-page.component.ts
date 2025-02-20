@@ -27,6 +27,6 @@ export class ProfilePageComponent {
     }
 
     respondSurvey() {
-        //direct to verify survey page
+        BasicdataFacade.setCurrentPage$(pages.getSurveyPage);
     }
 }

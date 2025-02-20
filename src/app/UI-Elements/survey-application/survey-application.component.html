@@ -9,6 +9,8 @@
         <div class="pages">
             <app-profile-page *ngIf="currentPage == pageEnum.profilePage"></app-profile-page>
             <app-new-survey *ngIf="currentPage == pageEnum.newSurveyPage"></app-new-survey>
+            <app-chatbot *ngIf="currentPage == pageEnum.chatbotPage"></app-chatbot>
+            <app-get-survey *ngIf="currentPage == pageEnum.getSurveyPage"></app-get-survey>
         </div>
     </div>
 </div>

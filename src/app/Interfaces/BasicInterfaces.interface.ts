@@ -1,11 +1,14 @@
 import { EventEmitter } from "@angular/core";
 import { Section } from "../Classes/section.class";
+import { Question } from "../Classes/question.class";
 
 export enum pages {
     homePage,
     loginPage,
     profilePage,
-    newSurveyPage
+    newSurveyPage,
+    chatbotPage,
+    getSurveyPage
 }
 
 export enum dialogContentType {
@@ -98,4 +101,14 @@ export interface IQuestionClarification {
 export interface ICommand {
     name: string;
     execute?(): void;
+}
+
+export interface IChat {
+    role: Role,
+    content: string | Question;
+}
+
+export enum Role {
+    user,
+    bot
 }

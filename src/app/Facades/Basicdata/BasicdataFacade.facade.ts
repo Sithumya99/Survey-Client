@@ -200,16 +200,27 @@ export class BasicdataFacade {
         return true;
     }
 
-    public static getResponseRelevance(questionDetails: IResponseRelevanceRequest) {
-
-    }
-
-    public static getClarification(clarificationDetails: IQuestionClarification) {
-
+    public static getNextQuestion(sectionId: number, questionId: number): Question | undefined {
+        let survey = this.impl.getCurrentSurvey();
+        let nextQuestion: Question | undefined;
+        let currentSectionIndex = survey!.sections.findIndex(sec => sec.sectionId == sectionId);
+        if (currentSectionIndex !== -1) {
+            let currentQuestionIndex = survey!.sections[currentSectionIndex].questions.findIndex(que => que.questionId == questionId);
+            if (currentQuestionIndex !== -1) {
+                if (currentQuestionIndex !== survey!.sections[currentSectionIndex].questions.length - 1) {
+                    //current question is not the last question of the section -> go to next question
+                    nextQuestion = survey!.sections[currentSectionIndex].questions[currentQuestionIndex + 1];
+                } else if (currentSectionIndex !== survey!.sections.length - 1) {
+                    //current question is last question of current section and current section is not the last section -> go to 1st question of next section
+                    nextQuestion = survey!.sections[currentSectionIndex + 1].questions[0];
+                }
+            }
+        }
+        return nextQuestion;
     }
 
     public static async getSuvey(surveyId: string) {
-
+        await this.impl.getSurvey(surveyId);
     }
 
     public static async submitResponse(response: Response) {

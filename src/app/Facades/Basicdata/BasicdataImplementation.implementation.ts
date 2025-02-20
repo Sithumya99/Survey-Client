@@ -59,38 +59,15 @@ export class BasicdataImplementation {
         });
     }
 
-    getResponseEvaluation(questionDetails: IResponseRelevanceRequest): Promise<void> {
-        return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getresponseevaluation", { username: UserProfileFacade.getUser()!.username, questionDetails}).subscribe(
-                async (result) => {
-                    resolve(result);
-                },
-                async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
-                    reject(err);
-                }
-            )
-        });
-    }
-
-    getClarification(clarificationDetails: IQuestionClarification): Promise<void> {
-        return new Promise((resolve, reject) => {
-                CommunicationService.http.postFromSurveyServer("getclarification", {username: UserProfileFacade.getUser()!.username, clarificationDetails}).subscribe(
-                async (result) => {
-                    resolve(result);
-                },
-                async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
-                    reject(err);
-                }
-            )
-        });
-    }
-
     getSurvey(surveyId: string): Promise<void> {
         return new Promise((resolve, reject) => {
             CommunicationService.http.postFromSurveyServer("getsurvey", { username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
                 async (result) => {
+                    if ((!result.requiresLogin) || (result.requiresLogin && UserProfileFacade.getUser())) {
+                        BasicdataFacade.setCurrentPage$(pages.chatbotPage);
+                    } else {
+                        BasicdataFacade.setCurrentPage$(pages.loginPage);
+                    }
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {

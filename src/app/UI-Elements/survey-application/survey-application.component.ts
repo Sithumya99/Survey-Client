@@ -12,6 +12,8 @@ import { ProfilePageComponent } from "../profile-page/profile-page.component";
 import { NewSurveyComponent } from "../new-survey/new-survey.component";
 import { MessageFacade } from "../../Facades/Message/MessageFacade.facade";
 import { MsgDialogModel } from "../../Facades/Message/MsgDialogModel.model";
+import { ChatbotComponent } from "../chatbot/chatbot.component";
+import { GetSurveyComponent } from "../get-survey/get-survey.component";
 
 @Component({
     selector: 'app-survey-application',
@@ -22,7 +24,9 @@ import { MsgDialogModel } from "../../Facades/Message/MsgDialogModel.model";
         LoginPageComponent,
         AddFlowComponent,
         ProfilePageComponent,
-        NewSurveyComponent
+        NewSurveyComponent,
+        ChatbotComponent,
+        GetSurveyComponent
     ],
     templateUrl: './survey-application.component.html',
     standalone: true
@@ -31,12 +35,16 @@ import { MsgDialogModel } from "../../Facades/Message/MsgDialogModel.model";
 export class SurveyApplicationComponent {
     pageEnum = pages;
     currentPage: pages = pages.homePage;
-    isLoggedIn: boolean = UserProfileFacade.getIsLoggedIn();
+    isLoggedIn: boolean = false;
 
     constructor() {
         BasicdataFacade.getCurrentPage$().subscribe((page: pages) => {
             this.currentPage = page;
         })
+
+        UserProfileFacade.getIsLoggedIn$().subscribe(isLogged => {
+            this.isLoggedIn = isLogged;
+        });
 
         MessageFacade.getInfoMsg$().subscribe((msg: string) => {
             if (msg.length !== 0) {

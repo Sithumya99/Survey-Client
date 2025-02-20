@@ -4,10 +4,11 @@ import { loginInterface, pages } from "../../Interfaces/BasicInterfaces.interfac
 import { CommunicationService } from "../../Services/CommunicationService.service";
 import { BasicdataFacade } from "../Basicdata/BasicdataFacade.facade";
 import { MessageFacade } from "../Message/MessageFacade.facade";
+import { BehaviorSubject, Observable } from "rxjs";
 
 export class UserProfileImplementation {
     private authToken: string | undefined;
-    private isLoggedIn: boolean = false;
+    private isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private user: User | undefined;
     
     constructor() {}
@@ -20,8 +21,8 @@ export class UserProfileImplementation {
         return this.authToken;
     }
 
-    getIsLoggedIn(): boolean {
-        return this.isLoggedIn;
+    getIsLoggedIn$(): Observable<boolean> {
+        return this.isLoggedIn.asObservable();
     }
 
     getUser(): User | undefined {
@@ -30,7 +31,7 @@ export class UserProfileImplementation {
 
     logOut() {
         this.user = undefined;
-        this.isLoggedIn = false;
+        this.isLoggedIn.next(false);
         this.authToken = "";
     }
 
@@ -41,7 +42,7 @@ export class UserProfileImplementation {
                     this.user = new User(result);
                     BasicdataFacade.setSurveyIds$(result.surveys);
                     BasicdataFacade.setCurrentPage$(pages.profilePage);
-                    this.isLoggedIn = true;
+                    this.isLoggedIn.next(true);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
@@ -59,7 +60,7 @@ export class UserProfileImplementation {
                     this.user = new User(result);
                     BasicdataFacade.setSurveyIds$([]);
                     BasicdataFacade.setCurrentPage$(pages.profilePage);
-                    this.isLoggedIn = true;
+                    this.isLoggedIn.next(true);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {

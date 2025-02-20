@@ -1,3 +1,4 @@
+import { Observable } from "rxjs";
 import { User } from "../../Classes/user.class";
 import { loginInterface } from "../../Interfaces/BasicInterfaces.interface";
 import { UserProfileImplementation } from "./UserProfileImplementation.implementation";
@@ -13,8 +14,8 @@ export class UserProfileFacade {
         return this.impl.getAuthToken();
     }
 
-    public static getIsLoggedIn(): boolean {
-        return this.impl.getIsLoggedIn();
+    public static getIsLoggedIn$(): Observable<boolean> {
+        return this.impl.getIsLoggedIn$();
     }
 
     public static getUser(): User | undefined {
