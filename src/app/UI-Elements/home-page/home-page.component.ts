@@ -16,4 +16,8 @@ export class HomePageComponent {
     getStarted() {
         BasicdataFacade.setCurrentPage$(pages.loginPage);
     }
+
+    respond() {
+        BasicdataFacade.setCurrentPage$(pages.getSurveyPage);
+    }
 }

@@ -1,5 +1,5 @@
 import { MessageFacade } from "../Facades/Message/MessageFacade.facade";
-import { IConnectedFlow } from "../Interfaces/BasicInterfaces.interface";
+import { IConnectedFlow, IQuestion, ISection } from "../Interfaces/BasicInterfaces.interface";
 import { Question } from "./question.class";
 
 export class Section {
@@ -9,7 +9,6 @@ export class Section {
     sectionDescription: string = "";
     noOfQuestions: number;
     questions: Question[] = [];
-    connectedFlows: IConnectedFlow[] = [];
 
     constructor(surveyId: string, sectionId: number) {
         this.surveyId = surveyId;
@@ -27,6 +26,20 @@ export class Section {
                 break;
             case 'questionString':
                 this.questions[index!].questionString = value;
+        }
+    }
+
+    copy(copy: ISection) {
+        this.sectionTitle = copy.sectionTitle;
+        this.sectionDescription = copy.sectionDescription;
+        this.noOfQuestions = copy.noOfQuestions;
+        this.questions = [];
+        let jsonQuestions: IQuestion[] = copy.questions;
+        for (let i = 0; i < jsonQuestions.length; i++) {
+            let jsonq = jsonQuestions[i];
+            let question = new Question(this.sectionId, this.surveyId, jsonq.questionId, jsonq.questionType);
+            question.copy(jsonq);
+            this.questions.push(question);
         }
     }
 

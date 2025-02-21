@@ -1,4 +1,4 @@
-import { IQuestionOptions } from "../Interfaces/BasicInterfaces.interface";
+import { IQuestion, IQuestionOptions } from "../Interfaces/BasicInterfaces.interface";
 
 export class Question {
     sectionId: number;
@@ -7,7 +7,6 @@ export class Question {
     questionString: string = "";
     questionType: string;
     options: IQuestionOptions[] = [];
-    isRequired: boolean = false;
     noOfResponses: number;
 
     constructor(sectionId: number, surveyId: string, questionId: number, questionType: string, noOfResponses: number = 0) {
@@ -20,6 +19,12 @@ export class Question {
 
     setQuestionString(question: string) {
         this.questionString = question;
+    }
+
+    copy(copy: IQuestion) {
+        this.questionString = copy.questionString;
+        this.options = copy.options;
+        this.noOfResponses = copy.noOfResponses;
     }
 
     addOption(option: string) {

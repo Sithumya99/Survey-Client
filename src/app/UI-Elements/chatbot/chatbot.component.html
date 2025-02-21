@@ -5,14 +5,14 @@
     <div *ngFor="let field of getChat(); index as i" class="qa">
         <div class="chat-question" *ngIf="isQuestion(field)">
             <div *ngIf="isContentQuestion(field)">
-                <p class="">{{field.content.questionString}}</p>
-                <div class="options" ngIf="field.content.questionType !== 'open'">
-                    <div *ngFor="let option of field.content.options">
-                        <div *ngIf="field.content.questionType == 'checkbox'">
-                            <input type="checkbox" name="option" [value]="option.option" id=""/>
+                <p class="">{{getQuestionString(field)}}</p>
+                <div class="options" *ngIf="!isOpen(field)">
+                    <div *ngFor="let option of getOptions(field)">
+                        <div *ngIf="isCheckbox(field)">
+                            <input type="checkbox" name="option" (change)="saveChanges(field, option.option)" [value]="option.option" id=""/> <span>{{option.option}}</span>
                         </div>
-                        <div *ngIf="field.content.questionType == 'radio'">
-                            <input type="radio" name="option" [value]="option.option" id="">
+                        <div *ngIf="isRadio(field)">
+                            <input type="radio" name="option" (change)="saveChanges(field, option.option)" [value]="option.option" id=""> <span>{{option.option}}</span>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
     </div>
     <div class="input-and-commands">
         <div class="input-container">
-            <input type="text" name="input" id="input" (keyup)="clickPress($event)" [disabled]="isActive()" placeholder="getPlaceholder()" class="input-field">
+            <input type="text" name="input" id="input" [disabled]="!getIsActive()" [placeholder]="dynamicPlaceholder" class="input-field">
             <button id="send-btn" (click)="clickPress($event)">send</button>
             <button id="clarification" *ngIf="!isClarification" (click)="clarification()">Clarify Question</button>
             <button id="submit-btn" *ngIf="isEnd" (click)="saveResponse()"> Submit</button>

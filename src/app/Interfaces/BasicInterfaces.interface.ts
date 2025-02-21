@@ -112,3 +112,53 @@ export enum Role {
     user,
     bot
 }
+
+export interface IGetSurveyResponse {
+    responses: IResponseInterface[];
+    surveyId: string;
+    surveyTitle: string;
+    surveyDescription: string;
+    owner: string;
+    noOfResponses: number;
+    sections: ISection[];
+    flows: IFlow[];
+    requiresLogin: boolean;
+    startSection: string;
+}
+
+export interface ISection {
+    surveyId: string;
+    sectionId: number;
+    sectionTitle: string;
+    sectionDescription: string;
+    noOfQuestions: number;
+    questions: IQuestion[];
+}
+
+export interface IQuestion {
+    surveyId: string;
+    sectionId: number;
+    questionId: number;
+    questionString: string;
+    questionType: string;
+    options: IQuestionOptions[];
+    noOfResponses: number;
+}
+
+export interface IFlow {
+    surveyId: string;
+    flowId: number;
+    conditions: ConditionInterface[];
+    sectionFlow: number[];
+}
+
+export interface IResponseInterface {
+    surveyId: string;
+    answers: IResponse[];
+}
+
+export interface IResponse {
+    sectionId: number;
+    questionId: number;
+    answer: string;
+}

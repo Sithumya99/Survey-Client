@@ -48,7 +48,7 @@ export class AddFlowSectionComponent implements OnInit {
 
     addSelectedOptions(qNo: number, aNo: number) {
         this.selectedOption = {
-            questionNo: qNo,
+            questionNo: qNo + 1,
             answerNo: aNo
         };
         if (this.addFlowSectionDialog!.update !== undefined)

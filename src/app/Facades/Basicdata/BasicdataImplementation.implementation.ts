@@ -6,6 +6,7 @@ import { UserProfileFacade } from "../UserProfile/UserProfileFacade.facade";
 import { IQuestionClarification, IResponseRelevanceRequest, IUserSurveys, pages } from "../../Interfaces/BasicInterfaces.interface";
 import { MessageFacade } from "../Message/MessageFacade.facade";
 import { BasicdataFacade } from "./BasicdataFacade.facade";
+import { ChatbotFacade } from "../Chatbot/ChatbotFacade.facade";
 
 export class BasicdataImplementation {
     private currentSurvey: BehaviorSubject<Survey | undefined> = new BehaviorSubject<Survey | undefined>(undefined);
@@ -41,8 +42,10 @@ export class BasicdataImplementation {
     }
 
     saveSurvey(survey: Survey): Promise<void> {
+        let username = "";
+        if (UserProfileFacade.getUser()) username = UserProfileFacade.getUser()!.username;
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("createsurvey", {username: UserProfileFacade.getUser()!.username, ...survey}).subscribe(
+            CommunicationService.http.postFromSurveyServer("createsurvey", {username: username, ...survey}).subscribe(
                 async (result) => {
                     UserProfileFacade.getUser()!.surveys.push(result.surveyId); //returns id of newly created survey
                     this.setSurveyIds$(UserProfileFacade.getUser()!.surveys);
@@ -60,10 +63,16 @@ export class BasicdataImplementation {
     }
 
     getSurvey(surveyId: string): Promise<void> {
+        let username = "";
+        if (UserProfileFacade.getUser()) username = UserProfileFacade.getUser()!.username;
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getsurvey", { username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
+            CommunicationService.http.postFromSurveyServer("getsurvey", { username: username, surveyId}).subscribe(
                 async (result) => {
                     if ((!result.requiresLogin) || (result.requiresLogin && UserProfileFacade.getUser())) {
+                        let survey = new Survey(result.survey.surveyId, result.survey.owner);
+                        survey.copy(result.survey);
+                        BasicdataFacade.setCurrentSurvey$(survey);
+                        ChatbotFacade.initChat();
                         BasicdataFacade.setCurrentPage$(pages.chatbotPage);
                     } else {
                         BasicdataFacade.setCurrentPage$(pages.loginPage);
@@ -79,8 +88,10 @@ export class BasicdataImplementation {
     }
 
     submitResponse(response: Response): Promise<void> {
+        let username = "";
+        if (UserProfileFacade.getUser()) username = UserProfileFacade.getUser()!.username;
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("submitresponse", {username: UserProfileFacade.getUser()!.username, response}).subscribe(
+            CommunicationService.http.postFromSurveyServer("submitresponse", {username: username, response}).subscribe(
                 async (result) => {
                     MessageFacade.setInfoMsg$("Response is submitted!")
                     resolve(result);

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { IChat, IQuestionClarification, IResponseRelevanceRequest, Role } from "../../Interfaces/BasicInterfaces.interface";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { IChat, IQuestionClarification, IQuestionOptions, IResponseRelevanceRequest, Role } from "../../Interfaces/BasicInterfaces.interface";
 import { Question } from "../../Classes/question.class";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
 import { ChatbotFacade } from "../../Facades/Chatbot/ChatbotFacade.facade";
@@ -11,7 +11,8 @@ import { ChatbotFacade } from "../../Facades/Chatbot/ChatbotFacade.facade";
     imports: [
         CommonModule
     ],
-    templateUrl: './chatbot.component.html'
+    templateUrl: './chatbot.component.html',
+    styleUrl: './chatbot.component.scss'
 })
 
 export class ChatbotComponent implements OnInit {
@@ -19,14 +20,18 @@ export class ChatbotComponent implements OnInit {
     conversation: IChat[] = [];
     isClarification: boolean = false;
     isEnd: boolean = false;
+    dynamicPlaceholder: string = "";
+    isActive: boolean = false;
 
-    ngOnInit(): void {
+    constructor(private cdr: ChangeDetectorRef) {
+        this.setPlaceholder();
         ChatbotFacade.getChat$().subscribe(chat => {
             this.conversation = chat;
         });
 
         ChatbotFacade.getCurrentQuestion$().subscribe(que => {
             this.currentQuestion = que;
+            this.setIsActive();
         });
 
         ChatbotFacade.getIsEnd().subscribe(end => {
@@ -34,12 +39,32 @@ export class ChatbotComponent implements OnInit {
         });
     }
 
+    ngOnInit(): void {
+        ChatbotFacade.getChat$().subscribe(chat => {
+            this.conversation = [...chat];
+            this.cdr.detectChanges();
+        });
+
+        ChatbotFacade.getCurrentQuestion$().subscribe(que => {
+            this.currentQuestion = que;
+            this.setIsActive();
+        });
+
+        ChatbotFacade.getIsEnd().subscribe(end => {
+            this.isEnd = end;
+        });
+    }
+
+    getIsActive(): boolean {
+        return this.isActive;
+    }
+
     getChat(): IChat[] {
         return this.conversation;
     }
 
-    isActive(): boolean {
-        return this.currentQuestion!.questionType == "open" || this.isClarification;
+    setIsActive(): void {
+        this.isActive = this.currentQuestion!.questionType == "open" || this.isClarification;
     }
 
     isContentQuestion(field: IChat): boolean {
@@ -48,6 +73,8 @@ export class ChatbotComponent implements OnInit {
 
     clarification() {
         this.isClarification = true;
+        this.setPlaceholder();
+        this.setIsActive();
     }
 
     isAnswer(field: IChat): boolean {
@@ -58,11 +85,11 @@ export class ChatbotComponent implements OnInit {
         return field.role == Role.bot;
     }
 
-    getPlaceholder(): string {
+    setPlaceholder(): void {
         if (this.isClarification) {
-            return "Ask SurveyBot for Clarification...";
+            this.dynamicPlaceholder = "Ask SurveyBot for Clarification...";
         } else {
-            return "Enter your answer...";
+            this.dynamicPlaceholder = "Enter your answer...";
         }
     }
 
@@ -79,6 +106,8 @@ export class ChatbotComponent implements OnInit {
                     };
                     ChatbotFacade.getClarification(clarify);
                     this.isClarification = false;
+                    this.setPlaceholder();
+                    this.setIsActive();
                 } else {
                     //if open question valiadte response relevance
                     if (this.currentQuestion!.questionType == 'open') {
@@ -94,6 +123,60 @@ export class ChatbotComponent implements OnInit {
             }
             inputElm.value = "";
         }
+    }
+
+    saveChanges(field: IChat, option: string) {
+        if (field.content instanceof Question) {
+            let question: Question = field.content;
+            let optionIndex = question.options.findIndex(op => op.option == option);
+            ChatbotFacade.updateResponse({
+                sectionId: question.sectionId,
+                questionId: question.questionId,
+                answer: optionIndex.toString()
+            });
+            ChatbotFacade.goToNextQuestion();
+        }
+    }
+
+    isRadio(field: IChat): boolean {
+        if (field.content instanceof Question) {
+            if (field.content.questionType == 'radio') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isCheckbox(field: IChat): boolean {
+        if (field.content instanceof Question) {
+            if (field.content.questionType == 'checkbox') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isOpen(field: IChat): boolean {
+        if (field.content instanceof Question) {
+            if (field.content.questionType == 'open') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getQuestionString(field: IChat): string {
+        if (field.content instanceof Question) {
+            return field.content.questionString;
+        }
+        return "";
+    }
+
+    getOptions(field: IChat): IQuestionOptions[] {
+        if (field.content instanceof Question) {
+            return field.content.options;
+        }
+        return [];
     }
 
     saveResponse() {
