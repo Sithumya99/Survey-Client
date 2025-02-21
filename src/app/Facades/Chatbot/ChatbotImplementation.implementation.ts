@@ -23,7 +23,15 @@ export class ChatbotImplementation {
     }
 
     updateResponse(res: IResponse) {
-        this.currentResponse!.answers.push(res);
+        let existing = this.currentResponse!.answers.find(a => a.sectionId == res.sectionId && a.questionId == res.questionId);
+        let questionType = this.currentQuestion.value!.questionType;
+        if (existing && questionType == 'checkbox') {
+            existing.answer = existing.answer + "/" + res.answer;
+        } else if (existing && questionType == 'radio') {
+            existing.answer = res.answer;
+        } else {
+            this.currentResponse!.answers.push(res);
+        }
     }
 
     getCurrentResponse(): Response | undefined {
@@ -117,6 +125,24 @@ export class ChatbotImplementation {
 
                         this.goToNextQuestion();
                     }
+                    resolve(result);
+                },
+                async (err: HttpErrorResponse) => {
+                    MessageFacade.setErrorMsg$(err.error.message);
+                    reject(err);
+                }
+            )
+        });
+    }
+
+    submitResponse(response: Response): Promise<void> {
+        let username = "";
+        if (UserProfileFacade.getUser()) username = UserProfileFacade.getUser()!.username;
+        return new Promise((resolve, reject) => {
+            CommunicationService.http.postFromSurveyServer("submitresponse", {username: username, response}).subscribe(
+                async (result) => {
+                    //reset everything
+                    MessageFacade.setInfoMsg$("Response is submitted!")
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {

@@ -29,4 +29,8 @@ export class ProfilePageComponent {
     respondSurvey() {
         BasicdataFacade.setCurrentPage$(pages.getSurveyPage);
     }
+
+    goToDashboard(surveyId: string) {
+        BasicdataFacade.getSurveyMetrics(surveyId);
+    }
 }

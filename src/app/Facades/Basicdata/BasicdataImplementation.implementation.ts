@@ -87,27 +87,14 @@ export class BasicdataImplementation {
         });
     }
 
-    submitResponse(response: Response): Promise<void> {
-        let username = "";
-        if (UserProfileFacade.getUser()) username = UserProfileFacade.getUser()!.username;
-        return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("submitresponse", {username: username, response}).subscribe(
-                async (result) => {
-                    MessageFacade.setInfoMsg$("Response is submitted!")
-                    resolve(result);
-                },
-                async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
-                    reject(err);
-                }
-            )
-        });
-    }
-
     getSurveyMetrics(surveyId: string): Promise<void> {
         return new Promise((resolve, reject) => {
             CommunicationService.http.postFromSurveyServer("getsurveydetails", {username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
                 async (result) => {
+                    let survey = new Survey(result.survey.surveyId, result.survey.owner);
+                    survey.copy(result.survey);
+                    BasicdataFacade.setCurrentSurvey$(survey);
+                    BasicdataFacade.setCurrentPage$(pages.surveyDashboardPage);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {

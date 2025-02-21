@@ -236,4 +236,9 @@ export class ChatbotFacade {
             return nextQuestion;
         }
     }
+
+    public static async submitResponse() {
+        let res = this.impl.getCurrentResponse();
+        this.impl.submitResponse(res!);
+    }
 }

@@ -14,6 +14,7 @@ import { MessageFacade } from "../../Facades/Message/MessageFacade.facade";
 import { MsgDialogModel } from "../../Facades/Message/MsgDialogModel.model";
 import { ChatbotComponent } from "../chatbot/chatbot.component";
 import { GetSurveyComponent } from "../get-survey/get-survey.component";
+import { SurveyDashboardComponent } from "../survey-dashboard/survey-dashboard.component";
 
 @Component({
     selector: 'app-survey-application',
@@ -26,7 +27,8 @@ import { GetSurveyComponent } from "../get-survey/get-survey.component";
         ProfilePageComponent,
         NewSurveyComponent,
         ChatbotComponent,
-        GetSurveyComponent
+        GetSurveyComponent,
+        SurveyDashboardComponent
     ],
     templateUrl: './survey-application.component.html',
     standalone: true

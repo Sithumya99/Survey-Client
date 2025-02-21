@@ -206,11 +206,7 @@ export class BasicdataFacade {
         await this.impl.getSurvey(surveyId);
     }
 
-    public static async submitResponse(response: Response) {
-
-    }
-
-    public static getSurveyMetrics(surveyId: string) {
-
+    public static async getSurveyMetrics(surveyId: string) {
+        await this.impl.getSurveyMetrics(surveyId);
     }
 }

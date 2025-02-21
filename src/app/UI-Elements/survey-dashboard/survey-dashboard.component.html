@@ -1,0 +1,55 @@
+<div class="container">
+    <div class="title">
+        <h3>{{survey!.surveyId + '. ' + survey!.surveyTitle}}</h3>
+        <p>{{survey!.surveyDescription}}</p>
+    </div>
+
+    <div class="survey-body">
+        <div class="no-responses">
+            <p>Total responses collected: </p> <span>{{survey!.noOfResponses}}</span>
+        </div>
+
+        <div class="section-container" *ngIf="survey!.noOfResponses !== 0">
+            <div class="sections" *ngFor="let section of survey!.sections">
+                <div class="section-title">
+                    <h5>{{section.sectionId + '. ' + section.sectionTitle}}</h5>
+                    <p>{{section.sectionDescription}}</p>
+                </div>
+                <div class="section-body">
+                    <div class="questions" *ngFor="let question of section.questions">
+                        <div class="question">
+                            <p>{{question.questionId + '. ' + question.questionString}}</p>
+                        </div>
+                        <div class="question-metrics">
+                            <div class="checkbox" *ngIf="isCheckbox(question)">
+                                <ngx-charts-pie-chart
+                                [view]="[400, 400]"
+                                [results]="getPieChartData(section.sectionId, question.questionId)"
+                                [legend]="true"
+                                [doughnut]="false">
+                                </ngx-charts-pie-chart>
+                            </div>
+                            <div class="radio" *ngIf="isRadio(question)">
+                                <ngx-charts-pie-chart
+                                [view]="[400, 400]"
+                                [results]="getPieChartData(section.sectionId, question.questionId)"
+                                [legend]="true"
+                                [doughnut]="false">
+                                </ngx-charts-pie-chart>
+                            </div>
+                            <div class="open" *ngIf="isOpen(question)">
+                                <div *ngFor="let answer of getOpenAnswers(section.sectionId, question.questionId)">
+                                    <p>{{answer}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-responses" *ngIf="survey!.noOfResponses == 0">
+            <p>No responses have been collected. Check back later.</p>
+        </div>
+    </div>
+</div>

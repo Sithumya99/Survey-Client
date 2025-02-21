@@ -8,7 +8,8 @@ export enum pages {
     profilePage,
     newSurveyPage,
     chatbotPage,
-    getSurveyPage
+    getSurveyPage,
+    surveyDashboardPage
 }
 
 export enum dialogContentType {
@@ -161,4 +162,9 @@ export interface IResponse {
     sectionId: number;
     questionId: number;
     answer: string;
+}
+
+export interface IPieChart {
+    name: string;
+    value: number;
 }
