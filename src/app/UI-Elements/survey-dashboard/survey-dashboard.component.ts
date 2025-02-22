@@ -13,7 +13,8 @@ import { IPieChart } from "../../Interfaces/BasicInterfaces.interface";
         CommonModule,
         NgxChartsModule
     ],
-    templateUrl: './survey-dashboard.component.html'
+    templateUrl: './survey-dashboard.component.html',
+    styleUrl: './survey-dashboard.component.scss'
 })
 
 export class SurveyDashboardComponent {
@@ -51,14 +52,14 @@ export class SurveyDashboardComponent {
         return answers;
     }
 
-    getPieChartData(sectionId: number, questionId: number): IPieChart[] {
+    getChartData(sectionId: number, questionId: number): IPieChart[] {
         let pieData: IPieChart[] = [];
 
         for (let i = 0; i < this.survey!.sections.length; i++) {
             let section = this.survey!.sections[i];
             if (section.sectionId == sectionId) {
                 for (let j = 0; j < section.questions.length; j++) {
-                    let question = section.questions[i];
+                    let question = section.questions[j];
                     if (question.questionId == questionId) {
                         for (let op = 0; op < question.options.length; op++) {
                             pieData.push({

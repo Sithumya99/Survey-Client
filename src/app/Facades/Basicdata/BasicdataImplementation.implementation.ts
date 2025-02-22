@@ -47,14 +47,14 @@ export class BasicdataImplementation {
         return new Promise((resolve, reject) => {
             CommunicationService.http.postFromSurveyServer("createsurvey", {username: username, ...survey}).subscribe(
                 async (result) => {
-                    UserProfileFacade.getUser()!.surveys.push(result.surveyId); //returns id of newly created survey
+                    UserProfileFacade.getUser()!.surveys.push({surveyId: result.surveyId, surveyTitle: result.surveyTitle, id: result.id}); //returns id of newly created survey
                     this.setSurveyIds$(UserProfileFacade.getUser()!.surveys);
                     MessageFacade.setInfoMsg$("Survey created!");
                     BasicdataFacade.setCurrentPage$(pages.profilePage);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     BasicdataFacade.setCurrentPage$(pages.profilePage);
                     reject(err);
                 }
@@ -80,7 +80,7 @@ export class BasicdataImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     reject(err);
                 }
             )
@@ -89,7 +89,7 @@ export class BasicdataImplementation {
 
     getSurveyMetrics(surveyId: string): Promise<void> {
         return new Promise((resolve, reject) => {
-            CommunicationService.http.postFromSurveyServer("getsurveydetails", {username: UserProfileFacade.getUser()!.username, surveyId}).subscribe(
+            CommunicationService.http.postFromSurveyServer("getsurveydetails", {username: UserProfileFacade.getUser()!.username, surveyId: surveyId}).subscribe(
                 async (result) => {
                     let survey = new Survey(result.survey.surveyId, result.survey.owner);
                     survey.copy(result.survey);
@@ -98,7 +98,7 @@ export class BasicdataImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     reject(err);
                 }
             )

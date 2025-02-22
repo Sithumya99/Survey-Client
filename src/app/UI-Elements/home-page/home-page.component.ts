@@ -7,7 +7,8 @@ import { pages } from "../../Interfaces/BasicInterfaces.interface";
     selector: 'app-home-page',
     imports: [],
     templateUrl: './home-page.component.html',
-    standalone: true
+    standalone: true,
+    styleUrl: './home-page.component.scss'
 })
 
 export class HomePageComponent {

@@ -10,7 +10,8 @@ import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade"
     imports: [
         CommonModule
     ],
-    templateUrl: './add-section.component.html'
+    templateUrl: './add-section.component.html',
+    styleUrl: './add-section.component.scss'
 })
 
 export class AddSectionComponent {

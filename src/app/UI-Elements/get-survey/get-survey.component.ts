@@ -9,7 +9,8 @@ import { pages } from "../../Interfaces/BasicInterfaces.interface";
     imports: [
         CommonModule
     ],
-    templateUrl: './get-survey.component.html'
+    templateUrl: './get-survey.component.html',
+    styleUrl: './get-survey.component.scss'
 })
 
 export class GetSurveyComponent {

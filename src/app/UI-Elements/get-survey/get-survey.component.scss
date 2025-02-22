@@ -1,0 +1,18 @@
+h1 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    margin: auto;
+
+    button {
+        align-self: flex-start;
+    }
+}

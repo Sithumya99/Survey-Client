@@ -6,13 +6,13 @@
             <p>{{parentSection!.sectionDescription}}</p>
         </div>
         <div *ngFor="let question of parentSection!.questions; let i = index" class="questions">
-            <div *ngIf="question.questionType !== 'open'">
+            <div *ngIf="question.questionType !== 'open'" class="question">
                 <div class="question-title">
                     <input type="radio" name="question.questionId" (change)="addSelectedQuestion(i)" id="question.questionId"/>
                     <p>{{question.questionId + '. ' + question.questionString}}</p>
                 </div>
                 <div *ngIf="isQuestionSelected(i)" class="question-options">
-                    <div *ngFor="let option of question.options; let j = index">
+                    <div *ngFor="let option of question.options; let j = index" class="option">
                         <input type="radio" name="option.option" [disabled]="isDisable(i, j)" (change)="addSelectedOptions(i, j)" id="option.option"/>
                         <p>{{option.option}}</p>
                     </div>

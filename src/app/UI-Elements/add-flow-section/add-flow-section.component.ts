@@ -11,7 +11,8 @@ import { AddFlowSectionDialogModel } from "./AddFlowSectionDialogModel.model";
     imports: [
         CommonModule
     ],
-    templateUrl: './add-flow-section.component.html'
+    templateUrl: './add-flow-section.component.html',
+    styleUrl: './add-flow-section.component.scss'
 })
 
 export class AddFlowSectionComponent implements OnInit {

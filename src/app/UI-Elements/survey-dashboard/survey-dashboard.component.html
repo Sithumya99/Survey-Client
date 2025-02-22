@@ -22,17 +22,20 @@
                         </div>
                         <div class="question-metrics">
                             <div class="checkbox" *ngIf="isCheckbox(question)">
-                                <ngx-charts-pie-chart
-                                [view]="[400, 400]"
-                                [results]="getPieChartData(section.sectionId, question.questionId)"
+                                <ngx-charts-bar-vertical
+                                [view]="[700, 400]"
+                                [results]="getChartData(section.sectionId, question.questionId)"
+                                [scheme]="'cool'"
+                                [xAxis]="true"
+                                [yAxis]="true"
                                 [legend]="true"
-                                [doughnut]="false">
-                                </ngx-charts-pie-chart>
+                                [showDataLabel]="true">
+                                </ngx-charts-bar-vertical>
                             </div>
                             <div class="radio" *ngIf="isRadio(question)">
                                 <ngx-charts-pie-chart
                                 [view]="[400, 400]"
-                                [results]="getPieChartData(section.sectionId, question.questionId)"
+                                [results]="getChartData(section.sectionId, question.questionId)"
                                 [legend]="true"
                                 [doughnut]="false">
                                 </ngx-charts-pie-chart>

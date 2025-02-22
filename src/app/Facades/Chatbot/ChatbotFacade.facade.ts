@@ -34,6 +34,19 @@ export class ChatbotFacade {
         this.impl.setIsEnd(value);
     }
 
+    public static getQuestionAnswer(sectionId: number, questionId: number): number[] {
+        let answerIndex = this.impl.getCurrentResponse()!.answers.findIndex(a => a.sectionId == sectionId && a.questionId == questionId);
+        if (answerIndex !== -1) {
+            let answers = this.impl.getCurrentResponse()!.answers[answerIndex].answer.split("/");
+            let result: number[] = [];
+            answers.forEach(an => {
+                result.push(+an);
+            })
+            return result;
+        }
+        return [-1];
+    }
+
     public static async getClarification(clarificationDetails: IQuestionClarification) {
         await this.impl.getClarification(clarificationDetails);
     }

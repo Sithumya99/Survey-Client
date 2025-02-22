@@ -31,7 +31,8 @@ import { SurveyDashboardComponent } from "../survey-dashboard/survey-dashboard.c
         SurveyDashboardComponent
     ],
     templateUrl: './survey-application.component.html',
-    standalone: true
+    standalone: true,
+    styleUrl: './survey-application.component.scss'
 })
 
 export class SurveyApplicationComponent {

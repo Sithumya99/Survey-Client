@@ -1,0 +1,52 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-inline-start: 1rem;
+    gap: .6rem;
+}
+
+.title {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.topic {
+    text-align: center;
+}
+
+.requires-login {
+    display: flex;
+    gap: .5rem;
+}
+
+.sections {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    padding: .5rem;
+    background-color: white;
+
+    h3, p {
+        margin: 0;
+    }
+}
+
+.start-section {
+    display: flex;
+    gap: .3rem;
+    align-items: center;
+
+    #options {
+        height: fit-content;
+    }
+}

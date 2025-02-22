@@ -29,6 +29,7 @@ export class Survey {
         this.surveyDescription = copy.surveyDescription;
         this.startSection = copy.startSection;
         this.requiresLogin = copy.requiresLogin;
+        this.noOfResponses = copy.noOfResponses;
 
         this.sections = [];
         let jsonSections: ISection[] = copy.sections;

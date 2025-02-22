@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { CommunicationService } from './Services/CommunicationService.service';
 import { SurveyApplicationComponent } from './UI-Elements/survey-application/survey-application.component';
 import { DialogComponent } from './UI-Elements/dialog/dialog-container.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +12,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     RouterOutlet,
     SurveyApplicationComponent,
     DialogComponent,
-    NgxChartsModule
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

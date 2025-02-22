@@ -1,14 +1,16 @@
-<div class="login-form">
-    <p>Username:</p> <input type="text" name="username" id="" (input)="saveChanges($event, 'username')"/>
-    <p>Password:</p> <input type="password" name="password" id="" (input)="saveChanges($event, 'password')"/>
-</div>
-
-<div *ngIf="isLogin" class="login-button">
-    <button (click)="loginUser()">Login</button>
-    <p>No account?</p> <button (click)="toggleForm()">Register</button>
-</div>
-
-<div *ngIf="!isLogin" class="register-button">
-    <button (click)="registerUser()">Register</button>
-    <p>Have an account?</p> <button (click)="toggleForm()">Login</button>
+<div class="cotainer">
+    <div class="login-form">
+        <p>Username:</p> <input type="text" name="username" id="" (input)="saveChanges($event, 'username')"/>
+        <p>Password:</p> <input type="password" name="password" id="" (input)="saveChanges($event, 'password')"/>
+    </div>
+    
+    <div *ngIf="isLogin" class="login-button">
+        <button (click)="loginUser()">Login</button>
+        <div><p>No account?</p> <button (click)="toggleForm()">Register</button></div>
+    </div>
+    
+    <div *ngIf="!isLogin" class="register-button">
+        <button (click)="registerUser()">Register</button>
+        <div><p>Have an account?</p> <button (click)="toggleForm()">Login</button></div>
+    </div>
 </div>

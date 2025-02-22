@@ -162,6 +162,8 @@
         .dialog-title {
             color: black;
             background: white;
+            display: flex;
+            gap: .4rem;
         }
  
         h1 {

@@ -66,6 +66,7 @@ export abstract class IDialogModel {
 }
 
 export interface IUserSurveys {
+    id: string;
     surveyId: string;
     surveyTitle: string;
 }

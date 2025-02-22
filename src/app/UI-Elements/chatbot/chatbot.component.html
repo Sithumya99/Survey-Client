@@ -1,34 +1,38 @@
-<div class="chatbot-header">
-    <h3>SurveyBot</h3>
-</div>
-<div class="chat">
-    <div *ngFor="let field of getChat(); index as i" class="qa">
-        <div class="chat-question" *ngIf="isQuestion(field)">
-            <div *ngIf="isContentQuestion(field)">
-                <p class="">{{getQuestionString(field)}}</p>
-                <div class="options" *ngIf="!isOpen(field)">
-                    <div *ngFor="let option of getOptions(field)">
-                        <div *ngIf="isCheckbox(field)">
-                            <input type="checkbox" name="option" (change)="saveChanges(field, option.option)" [value]="option.option" id=""/> <span>{{option.option}}</span>
-                        </div>
-                        <div *ngIf="isRadio(field)">
-                            <input type="radio" name="option" (change)="saveChanges(field, option.option)" [value]="option.option" id=""> <span>{{option.option}}</span>
+<div class="container">
+    <div class="chatbot-header">
+        <h3>SurveyBot</h3>
+    </div>
+    <div class="chat">
+        <div class="messages">
+            <div *ngFor="let field of getChat(); index as i" class="qa">
+                <div class="chat-question" *ngIf="isQuestion(field)">
+                    <div *ngIf="isContentQuestion(field)">
+                        <p class="">{{getQuestionString(field)}}</p>
+                        <div class="options" *ngIf="!isOpen(field)">
+                            <div *ngFor="let option of getOptions(field)">
+                                <div *ngIf="isCheckbox(field)">
+                                    <input type="checkbox" name="option" (change)="saveChanges(field, option.option)" [value]="option.option" id=""/> <span>{{option.option}}</span>
+                                </div>
+                                <div *ngIf="isRadio(field)">
+                                    <input type="radio" [name]="getQuestionId(field)" (change)="saveChanges(field, option.option)" [value]="option.option" id="option.option"> <span>{{option.option}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div *ngIf="!isContentQuestion(field)">
+                        <p>{{field.content}}</p>
+                    </div>
                 </div>
-            </div>
-            <div *ngIf="!isContentQuestion(field)">
-                <p>{{field.content}}</p>
+                <p class="chat-answer" *ngIf="isAnswer(field)">{{field.content}}</p>
             </div>
         </div>
-        <p class="chat-answer" *ngIf="isAnswer(field)">{{field.content}}</p>
-    </div>
-    <div class="input-and-commands">
-        <div class="input-container">
-            <input type="text" name="input" id="input" [disabled]="!getIsActive()" [placeholder]="dynamicPlaceholder" class="input-field">
-            <button id="send-btn" (click)="clickPress($event)">send</button>
-            <button id="clarification" *ngIf="!isClarification" (click)="clarification()">Clarify Question</button>
-            <button id="submit-btn" *ngIf="isEnd" (click)="saveResponse()"> Submit</button>
+        <div class="input-and-commands">
+            <div class="input-container">
+                <input type="text" name="input" id="input" [value]="inputElText" (input)="saveTextChanges($event)" [disabled]="!getIsActive()" [placeholder]="dynamicPlaceholder" class="input-field">
+                <button id="send-btn" (click)="clickPress($event)">send</button>
+                <button id="clarification" *ngIf="!isClarification" (click)="clarification()">Clarify Question</button>
+                <button id="submit-btn" *ngIf="isEnd" (click)="saveResponse()"> Submit</button>
+            </div>
         </div>
     </div>
 </div>

@@ -1,6 +1,7 @@
 <div class="container">
+    <h1 class="topic">Create New Survey</h1>
     <div class="title">
-        <input type="text" name="title" [value]="survey!.surveyTitle" id="" (change)="setSurvey($event, 'title')" placeholder="Enter Survey Title...">
+        <input type="text" name="title" [value]="survey!.surveyTitle" id="" (change)="setSurvey($event, 'title')" placeholder="Enter Survey Title..."> <br/>
         <input type="text" name="description" [value]="survey!.surveyDescription" (change)="setSurvey($event, 'description')" placeholder="Enter Survey Description...">
     </div>
 
@@ -10,7 +11,7 @@
     </div>
 
     <div class="sections">
-        <div *ngFor="let section of survey!.sections">
+        <div *ngFor="let section of survey!.sections" class="section">
             <h3>{{section.sectionId + '. ' + section.sectionTitle}}</h3> <br/>
             <p>{{section.sectionDescription}}</p>
         </div>
@@ -26,13 +27,13 @@
         </select>
     </div>
 
-    <div class="flows">
+    <div class="flows" *ngIf="survey!.sections.length !== 0">
         <div class="add-flows-cmd">
             <button (click)="addFlows()">Define Flows</button>
         </div>
     </div>
 
-    <div class="save-survey">
+    <div class="save-survey" *ngIf="survey!.sections.length !== 0 && survey!.flows.length !== 0">
         <button (click)="createSurvey()">Create Survey</button>
     </div>
 </div>

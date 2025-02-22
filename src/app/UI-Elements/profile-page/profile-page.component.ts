@@ -9,7 +9,8 @@ import { IUserSurveys, pages } from "../../Interfaces/BasicInterfaces.interface"
     imports: [
         CommonModule
     ],
-    templateUrl: './profile-page.component.html'
+    templateUrl: './profile-page.component.html',
+    styleUrl: './profile-page.component.scss'
 })
 
 export class ProfilePageComponent {

@@ -14,7 +14,8 @@ import { Flow } from "../../Classes/flow.class";
     imports: [
         CommonModule
     ],
-    templateUrl: './new-survey.component.html'
+    templateUrl: './new-survey.component.html',
+    styleUrl: './new-survey.component.scss'
 })
 
 export class NewSurveyComponent {

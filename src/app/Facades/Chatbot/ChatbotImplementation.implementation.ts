@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable } from "rxjs";
-import { IChat, IQuestionClarification, IResponse, IResponseRelevanceRequest, Role } from "../../Interfaces/BasicInterfaces.interface";
+import { IChat, IQuestionClarification, IResponse, IResponseRelevanceRequest, pages, Role } from "../../Interfaces/BasicInterfaces.interface";
 import { CommunicationService } from "../../Services/CommunicationService.service";
 import { MessageFacade } from "../Message/MessageFacade.facade";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -85,7 +85,7 @@ export class ChatbotImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     reject(err);
                 }
             )
@@ -128,7 +128,7 @@ export class ChatbotImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     reject(err);
                 }
             )
@@ -143,10 +143,11 @@ export class ChatbotImplementation {
                 async (result) => {
                     //reset everything
                     MessageFacade.setInfoMsg$("Response is submitted!")
+                    BasicdataFacade.setCurrentPage$(pages.homePage);
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error.message);
+                    MessageFacade.setErrorMsg$(err.error);
                     reject(err);
                 }
             )

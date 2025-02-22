@@ -16,26 +16,26 @@
         <button (click)="removeQuestion(i)">Remove Question</button>
 
         <!-- Open-ended question -->
-        <div *ngIf="question.questionType === 'open'">
+        <div *ngIf="question.questionType === 'open'" class="option">
         <input type="text" placeholder="User will type the answer..." disabled />
         </div>
 
         <!-- Multiple Choice (Checkbox) -->
-        <div *ngIf="question.questionType === 'checkbox'">
+        <div *ngIf="question.questionType === 'checkbox'" class="option">
         <div *ngFor="let option of question.options; let j = index">
             <input type="checkbox" disabled />
             <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />
-            <button (click)="removeOption(question, j)">Remove</button>
+            <button (click)="removeOption(question, j)" class="remove-option">Remove</button>
         </div>
         <button (click)="addOption(question)">Add Option</button>
         </div>
 
         <!-- Single Choice (Radio Button) -->
-        <div *ngIf="question.questionType === 'radio'">
+        <div *ngIf="question.questionType === 'radio'" class="option">
         <div *ngFor="let option of question.options; let j = index">
             <input type="radio" name="radio-{{ i }}" disabled />
             <input type="text" (input)="setOption($event, question, j)" placeholder="Enter option text..." />
-            <button (click)="removeOption(question, j)">Remove</button>
+            <button (click)="removeOption(question, j)" class="remove-option">Remove</button>
         </div>
         <button (click)="addOption(question)">Add Option</button>
         </div>

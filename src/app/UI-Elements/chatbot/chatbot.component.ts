@@ -22,6 +22,7 @@ export class ChatbotComponent implements OnInit {
     isEnd: boolean = false;
     dynamicPlaceholder: string = "";
     isActive: boolean = false;
+    inputElText: string = "";
 
     constructor(private cdr: ChangeDetectorRef) {
         this.setPlaceholder();
@@ -93,16 +94,42 @@ export class ChatbotComponent implements OnInit {
         }
     }
 
-    clickPress(event: Event) {
-        let inputElm = event.target as HTMLInputElement;
+    getQuestionId(field: IChat): string {
+        if (field.content instanceof Question) {
+            return field.content.questionId + '/' + field.content.sectionId;
+        }
+        return '-1';
+    }
 
+    // isChecked(field: IChat, option: string): boolean {
+    //     if (field.content instanceof Question) {
+    //         let optionIndex = field.content.options.findIndex(op => op.option == option);
+    //         let answer = ChatbotFacade.getQuestionAnswer(field.content.sectionId, field.content.questionId);
+    //         if (answer[0] !== -1) {
+    //             if (field.content.questionType == 'checkbox') {
+    //                 for (let a = 0; a < answer.length; a++) {
+    //                     if (answer[a] == optionIndex) {
+    //                         return true;
+    //                     }
+    //                 }
+    //             } else if (field.content.questionType == 'radio') {
+    //                 if (answer[0] == optionIndex) {
+    //                     return true;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return false;
+    // }
+
+    clickPress(event: Event) {
         if ((event instanceof KeyboardEvent && (event as KeyboardEvent).key == 'Enter') || (event instanceof MouseEvent)) {
-            if (inputElm.value.trim() !== "") {
+            if (this.inputElText !== "") {
                 if (this.isClarification) {
                     //get clarification answer
                     let clarify: IQuestionClarification = { 
                         systemQuestion: this.currentQuestion!.questionString,
-                        userQuestion: inputElm.value
+                        userQuestion: this.inputElText
                     };
                     ChatbotFacade.getClarification(clarify);
                     this.isClarification = false;
@@ -115,13 +142,13 @@ export class ChatbotComponent implements OnInit {
                         let resRelevance: IResponseRelevanceRequest = {
                             context: survey!.surveyTitle + ":" + survey!.surveyDescription,
                             question: this.currentQuestion!.questionString,
-                            userResponse: inputElm.value
+                            userResponse: this.inputElText
                         };
                         ChatbotFacade.getResponseRelevance(resRelevance);
                     }
                 }
             }
-            inputElm.value = "";
+            this.inputElText = "";
         }
     }
 
@@ -136,6 +163,11 @@ export class ChatbotComponent implements OnInit {
             });
             ChatbotFacade.goToNextQuestion();
         }
+    }
+
+    saveTextChanges(event: Event) {
+        let value = (event.target as HTMLInputElement).value;
+        this.inputElText = value;
     }
 
     isRadio(field: IChat): boolean {
@@ -180,7 +212,6 @@ export class ChatbotComponent implements OnInit {
     }
 
     saveResponse() {
-        //maintain global response object
-        //call save response
+        ChatbotFacade.submitResponse();
     }
 }

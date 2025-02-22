@@ -1,15 +1,17 @@
-<div class="command-bar">
-    <button (click)="createSurvey()">Create Survey</button>
-    <button (click)="respondSurvey()">Respond to Survey</button>
-</div>
-
-<div class="survey-list">
-    <div *ngIf="surveys.length == 0">
-        <p>The surveys you create will appear here</p>
+<div class="container">
+    <div class="command-bar">
+        <button (click)="createSurvey()">Create Survey</button>
+        <button (click)="respondSurvey()">Respond to Survey</button>
     </div>
-    <div *ngFor="let survey of surveys; let i = index">
-        <div class="survey-card" (click)="goToDashboard(survey.surveyId)">
-            <h1>{{i + '. ' + survey.surveyTitle}}</h1>
+    
+    <div class="survey-list">
+        <div *ngIf="surveys.length == 0">
+            <p>The surveys you create will appear here</p>
+        </div>
+        <div *ngFor="let survey of surveys; let i = index">
+            <div class="survey-card" (click)="goToDashboard(survey.id)">
+                <h1>{{i + '. ' + survey.surveyTitle}}</h1>
+            </div>
         </div>
     </div>
 </div>

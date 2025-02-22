@@ -8,7 +8,8 @@ import { UserProfileFacade } from "../../Facades/UserProfile/UserProfileFacade.f
     imports: [
         CommonModule
     ],
-    templateUrl: './nav-bar.component.html'
+    templateUrl: './nav-bar.component.html',
+    styleUrl: './nav-bar.component.scss'
 })
 
 export class NavBarComponent {

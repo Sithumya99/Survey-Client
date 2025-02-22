@@ -1,0 +1,25 @@
+.command-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.survey-list {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    gap: .5rem;
+}
+
+.container {
+    width: 100%;
+    margin-inline-start: 1rem;
+}
+
+.survey-card {
+    background-color: white;
+    :hover {
+        cursor: pointer;
+    }
+}

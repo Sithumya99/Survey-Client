@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin: .3rem;
+    width: 100%;
+
+    h3, p {
+        margin: 0;
+    }
+}
+
+.no-responses {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.sections {
+    background-color: white;
+    margin: .6rem;
+    width: 100%;
+    padding: .6rem;
+
+    .section-title {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+
+        h5, p {
+            margin: 0;
+        }
+    }
+}
