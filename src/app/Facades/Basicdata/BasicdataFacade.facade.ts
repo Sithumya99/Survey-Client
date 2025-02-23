@@ -73,32 +73,6 @@ export class BasicdataFacade {
         return columns;
     }
 
-    public static mapColumnsToFlows(columns: Column[]): Flow[] {
-        let flows: Flow[] = [];
-        let surveyId: string = this.impl.getCurrentSurvey()!.surveyId;
-
-        for (let column of columns) {
-            this.traverseColumns(column, [], flows, surveyId);
-        }
-
-        return flows;
-    }
-
-    public static traverseColumns(column: Column, path: number[], flows: Flow[], surveyId: string) {
-        let newPath: number[] = [...path, column.section.sectionId];
-
-        if (column.children.length == 0) {
-            //leaf node
-            column.flows.forEach(flow => {
-                flows.push(new Flow(surveyId, flow, [], newPath));
-            });
-        } else {
-            for (let child of column.children) {
-                this.traverseColumns(child, newPath, flows, surveyId);
-            }
-        }
-    }
-
     public static getCurrentSurvey$(): Observable<Survey | undefined> {
         return this.impl.getCurrentSurvey$();
     }

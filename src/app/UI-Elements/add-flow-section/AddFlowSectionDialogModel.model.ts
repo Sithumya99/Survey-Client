@@ -1,6 +1,7 @@
 import { Flow } from "../../Classes/flow.class";
 import { Section } from "../../Classes/section.class";
 import { BasicdataFacade } from "../../Facades/Basicdata/BasicdataFacade.facade";
+import { MessageFacade } from "../../Facades/Message/MessageFacade.facade";
 import { Column, ConditionInterface, dialogContentType, IDialogInterface, IDialogModel, MediaSize } from "../../Interfaces/BasicInterfaces.interface";
 
 export class AddFlowSectionDialogModel extends IDialogModel {
@@ -83,7 +84,7 @@ export class AddFlowSectionDialogModel extends IDialogModel {
 
     private save() {
         if (this.selectedSection == undefined) {
-            //set error
+            MessageFacade.setErrorMsg$("No next section selected");
         } else {
             if (this.nextFlowId == this.currentFlowId) {
                 //leaf node -> add to same flow

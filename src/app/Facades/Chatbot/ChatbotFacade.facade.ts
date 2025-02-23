@@ -205,29 +205,11 @@ export class ChatbotFacade {
                         }
 
                         //check final flows
-                        if (finalMtachingFlows.length == 0) {
-                            //found no flows that match the current section condition
-                            //check for flows with any condition for current section condition
-                            for (let f = 0; f < existingConditionSatisfiedFlows.length; f++) {
-                                let checkFlow = existingConditionSatisfiedFlows[f];
-                                let checkCondition = checkFlow.conditions[currentSectionIndex + 1];
-                                if (checkCondition.questionNo == -1) {
-                                    //if any condition -> take the flow
-                                    finalMtachingFlows.push(checkFlow);
-                                    break;
-                                }
-                            }
-
-                            if (finalMtachingFlows.length > 0) {
-                                this.impl.setCurrentFlow(finalMtachingFlows[0]);
-                            } else {
-                                //if no matching flows -> end survey
-                                return nextQuestion; //undefined
-                            }
-                        } else {
+                        if (finalMtachingFlows.length !== 0) {
                             //flow(s) with satisfied current section condition exists
                             this.impl.setCurrentFlow(finalMtachingFlows[0]);
                         }
+                        //else none of the matching flows' current section conditions are satisfied -> stay in current flow
                         
                     }
                     //else no other flows satisfy previous conditions -> stay in current flow

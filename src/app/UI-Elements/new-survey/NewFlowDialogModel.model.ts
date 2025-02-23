@@ -25,12 +25,7 @@ export class NewFlowDialogModel extends IDialogModel {
             title: "Define Flows for Sections",
             closeEnabled: true,
             contentType: dialogContentType.addFlow,
-            commands: [
-                {
-                    name: "Save",
-                    execute: this.saveFlow.bind(this)
-                }
-            ],
+            commands: [],
             size: MediaSize.large
         };
     }
@@ -45,11 +40,6 @@ export class NewFlowDialogModel extends IDialogModel {
 
     public override close(event: string): void {
         this.closeEvent.emit({event});
-    }
-
-    private saveFlow() {
-        this.flows = BasicdataFacade.mapColumnsToFlows(this.columns);
-        BasicdataFacade.addFlows(this.flows);
     }
 
     public override getData() {

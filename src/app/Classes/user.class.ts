@@ -10,8 +10,4 @@ export class User {
         this.username = userDetails.username;
         this.surveys = userDetails.surveys;
     }
-
-    public getSurveyById(index: number): IUserSurveys {
-        return this.surveys[index] || "";
-    }
 }

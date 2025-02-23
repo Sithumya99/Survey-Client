@@ -18,10 +18,13 @@ export class Response {
             if (answer.sectionId == sectionId) {
                 let currentQuestion = currentSection!.questions.find(q => q.questionId == answer.questionId);
                 if (currentQuestion!.questionType !== 'open') {
-                    conditions.push({
-                        questionNo: answer.questionId,
-                        answerNo: +answer.answer
-                    });
+                    let answers = answer.answer.split("/");
+                    for (let a = 0; a < answers.length; a++) {
+                        conditions.push({
+                            questionNo: answer.questionId,
+                            answerNo: +answers[a]
+                        });
+                    }
                 }
             }
         }
