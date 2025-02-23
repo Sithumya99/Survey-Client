@@ -54,7 +54,7 @@ export class BasicdataImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error);
+                    MessageFacade.setErrorMsg$(err.error.error);
                     BasicdataFacade.setCurrentPage$(pages.profilePage);
                     reject(err);
                 }
@@ -80,7 +80,7 @@ export class BasicdataImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error);
+                    MessageFacade.setErrorMsg$(err.error.error);
                     reject(err);
                 }
             )
@@ -98,7 +98,7 @@ export class BasicdataImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error);
+                    MessageFacade.setErrorMsg$(err.error.error);
                     reject(err);
                 }
             )

@@ -46,7 +46,7 @@ export class UserProfileImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error);
+                    MessageFacade.setErrorMsg$(err.error.error);
                     reject(err);
                 }
             );
@@ -64,7 +64,7 @@ export class UserProfileImplementation {
                     resolve(result);
                 },
                 async (err: HttpErrorResponse) => {
-                    MessageFacade.setErrorMsg$(err.error);
+                    MessageFacade.setErrorMsg$(err.error.error);
                     reject(err);
                 }
             )
